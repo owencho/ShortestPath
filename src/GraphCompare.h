@@ -1,0 +1,5 @@
+#ifndef _GRAPHCOMPARE_H
+#define _GRAPHCOMPARE_H
+
+
+#endif // _GRAPHCOMPARE_H

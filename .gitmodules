@@ -1,0 +1,3 @@
+[submodule "AVLTree"]
+	path = AVLTree
+	url = https://github.com/owencho/AVLTree

@@ -1,0 +1,5 @@
+#ifndef _SHORTESTPATH_H
+#define _SHORTESTPATH_H
+
+
+#endif // _SHORTESTPATH_H
