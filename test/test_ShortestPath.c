@@ -6,8 +6,11 @@
 #include "ShortestPath.h"
 
 Node* root;
-IntNode nodeA ,nodeB ,nodeC,nodeD,nodeE;
-void setUp(void){}
+NetworkNode nodeA ,nodeB ,nodeC,nodeD,nodeE;
+ListItem itemA,itemB,itemC,itemD,itemE;
+List listDataA,listDataC,listDataD,listDataE,listDataB;
+void setUp(void){
+}
 void tearDown(void){}
 
 
@@ -21,6 +24,24 @@ void tearDown(void){}
 **/
 void test_ShortestPath(void){
 
-    root=ShortestPath((Node*)nodeC,(compare)intCompare);
-    TEST_ASSERT_EQUAL_INT_NODE()
+
+    root=shortestPath(&nodeC,(compare)graphCompare);
+    TEST_ASSERT_EQUAL_PTR(root,&node);
+    TEST_ASSERT_EQUAL_GRAPH_NODE((GraphNode*)root,&node);
+}
+
+/**
+*               3          4
+*         (A)--------(B)--------(E)
+*        1 \     7 /   \ 5     /
+*           \    /      \    / 7
+*            (C)---------(D)
+*                   2
+**/
+void test_ShortestPath(void){
+
+
+    root=findNearestNode(&nodeC,(compare)graphCompare,);
+    TEST_ASSERT_EQUAL_PTR(root,&node);
+    TEST_ASSERT_EQUAL_GRAPH_NODE((GraphNode*)root,&node);
 }
