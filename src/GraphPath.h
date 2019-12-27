@@ -1,6 +1,6 @@
 #ifndef _GRAPHPATH_H
 #define _GRAPHPATH_H
-#include "../LinkList/src/NetworkNode.h"
+#include "NetworkNode.h"
 typedef struct ShortestPath ShortestPath ;
 
 struct ShortestPath{

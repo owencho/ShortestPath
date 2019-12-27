@@ -1,6 +1,12 @@
 #include "ShortestPath.h"
-#include "NetworkNode.h"
-#include "AvlAdd.h"
+#include "ShortestPath.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include "../AvlTree/src/AvlAdd.h"
+#include "../AvlTree/src/Compare.h"
+#include "../LinkList/src/NetworkNode.h"
+#include "../LinkList/src/List.h"
+#include "../LinkList/src/ListItem.h"
 /*
 Node * shortestPath(NetworkNode * nNode){
     List * linkList;
@@ -17,19 +23,23 @@ Node * shortestPath(NetworkNode * nNode){
 */
 
 
-Node * findNearestNode(NetworkNode * node, List * linkList){
-    Node * root;
-    ListItem * listItem;
-    Link linkData;
-    GraphPath * gNode;
+Node * findNearestNode(NetworkNode * node){
+    Node* root;
     ShortestPath sPath;
-    resetCurrentListItem(linkList);
-    while(listItem !=NULL) {
+    List * linkList;
+    ListItem * listItem;
+    Link * linkItemData;
+    GraphPath  gNode;
+    linkList= getIteratorOfLinks(node);   //retreive the link list
+    resetCurrentListItem(linkList);      // reset the linkList
+    while(linkList->current !=NULL) {
         listItem = getNextListItem(linkList);
-        &linkData = listItem->data;
-        createShortestPath(&sPath, &linkData);
-        createGraphPath(gNode,&sPath);
-        root = avlAdd(root,gNode,(compare)graphCompare);
+        linkItemData = (Link*)listItem->data;    //retreive the data with cost, head , tail
+        if(linkItemData->head->marked ==0 ){
+            createShortestPath(&sPath,linkItemData);
+            createGraphPath(&gNode,&sPath);
+            root = avlAdd(root,(Node*)&gNode,(Compare)graphCompare);
+        }
     }
     return root;
 }
