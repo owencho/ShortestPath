@@ -1,3 +1,6 @@
 [submodule "AVLTree"]
 	path = AVLTree
 	url = https://github.com/owencho/AVLTree
+[submodule "LinkList"]
+	path = LinkList
+	url = https://github.com/owencho/LinkList

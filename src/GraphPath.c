@@ -1,17 +1,15 @@
 #include "GraphPath.h"
-/*
-void initGraphNode(GraphNode * node,  GraphNode * left ,GraphNode * right,int balanceFactor,NetworkNode * nNode){
-    node->left = left;
-    node->right = right;
-    node->bFactor = balanceFactor;
-    node->nNode = nNode;
-}
 
-void createGraphNode(GraphNode * node,int cost,NetworkNode * nNode){
+void createGraphPath(GraphPath * node,  ShortestPath * value ){
     node->left = NULL;
     node->right = NULL;
     node->bFactor = 0;
-    node->value = cost;
-    node->nNode = nNode;
+    node->value = value;
 }
-*/
+
+void createShortestPath(ShortestPath * sPath,  Link * linkItemData ){
+    sPath->dst = linkItemData->head;
+    sPath->right = linkItemData->tail;
+    sPath->pathCost = linkItemData.cost;
+    //path link
+}
