@@ -1,6 +1,7 @@
 #ifndef _GRAPHPATH_H
 #define _GRAPHPATH_H
 #include "NetworkNode.h"
+#include "List.h"
 typedef struct ShortestPath ShortestPath ;
 
 struct ShortestPath{
@@ -18,6 +19,6 @@ struct GraphPath{
     ShortestPath * value ;
 };
 
-void createGraphPath(GraphPath * node,  ShortestPath * value );
-void createShortestPath(ShortestPath * sPath,  Link * linkItemData );
+GraphPath *createGraphPath(ShortestPath * value);
+ShortestPath *createShortestPath(Link * linkItemData, List * pathLinks);
 #endif // _GRAPHPATH_H

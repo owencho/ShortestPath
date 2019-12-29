@@ -4,5 +4,6 @@
 #include "Node.h"
 #include "GraphCompare.h"
 //Node * shortestPath(Node* root,Compare compare);
-Node *  findNearestNode(NetworkNode * node);
+GraphPath* findNearestNode(GraphPath* graphRoot,NetworkNode * node);
+GraphPath* findGraphPath(GraphPath * root,NetworkNode * dstNode);
 #endif // _SHORTESTPATH_H

@@ -294,7 +294,7 @@ class UnityTestRunnerGenerator
     output.puts('    Try { \\') if cexception
     output.puts("      #{@options[:setup_name]}(); \\")
     output.puts("      TestFunc(#{va_args2}); \\")
-    output.puts('    } Catch(e) { TEST_ASSERT_EQUAL_HEX32_MESSAGE(CEXCEPTION_NONE, e, "Unhandled Exception!"); } \\') if cexception
+    output.puts('    } Catch(e) { TEST_ASSERT_EQUAL_MESSAGE(CEXCEPTION_NONE, e, "Unhandled Exception!"); } \\') if cexception
     output.puts('  } \\')
     output.puts('  if (TEST_PROTECT()) \\')
     output.puts('  { \\')
