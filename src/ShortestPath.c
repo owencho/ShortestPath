@@ -30,6 +30,7 @@ Node * findNearestNode(NetworkNode * node){
     ListItem * listItem;
     Link * linkItemData;
     GraphPath  gNode;
+    GraphPath * inNode;
     linkList= getIteratorOfLinks(node);   //retreive the link list
     resetCurrentListItem(linkList);      // reset the linkList
     while(linkList->current !=NULL) {
@@ -38,7 +39,8 @@ Node * findNearestNode(NetworkNode * node){
         if(linkItemData->head->marked ==0 ){
             createShortestPath(&sPath,linkItemData);
             createGraphPath(&gNode,&sPath);
-            root = avlAdd(root,(Node*)&gNode,(Compare)graphCompare);
+            inNode = &gNode;
+            root = avlAdd(root,(Node*)&inNode,(Compare)graphCompare);
         }
     }
     return root;
