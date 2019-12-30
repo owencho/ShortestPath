@@ -75,7 +75,7 @@ void initGraphPath(GraphPath*graphPath,GraphPath*left,GraphPath*right,int bFacto
 *                   2
 **/
 //all node without flag
-/*
+
 void test_getNearestNode(void){
     //create NetworkNode
     initNetworkNode(&nodeC,"nodeC",&linkList,0);

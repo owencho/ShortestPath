@@ -19,15 +19,15 @@ Node * shortestPath(NetworkNode * nNode){
     return root;
 
 */
-/*
-GraphPath* findNearestNode(GraphPath* AVLroot,GraphPath * currentPointingNode){
+
+GraphPath* findNearestNode(GraphPath* graphRoot,NetworkNode * node){
     Node * root;
     List * nearestNodelinkList;
     List * pathLinkList;
     ListItem * listItem;
     Link * linkItemData;
-    GraphPath * gNode;
-    ShortestPath * sPath;
+    Node * inputNode;
+    GraphPath * gNode =(GraphPath *)malloc(sizeof(GraphPath)+sizeof(ShortestPath));
     root = (Node *)graphRoot;
     nearestNodelinkList= getIteratorOfLinks(node);   //retreive the link list
     resetCurrentListItem(nearestNodelinkList);      // reset the linkList
@@ -35,25 +35,26 @@ GraphPath* findNearestNode(GraphPath* AVLroot,GraphPath * currentPointingNode){
     while(nearestNodelinkList->current !=NULL) {
         listItem = getNextListItem(nearestNodelinkList);
         linkItemData = (Link*)listItem->data;    //retreive the data with cost, head , tail
-        linkItemData -> cost = linkItemData -> cost + currentPointingNode->value->pathCost;
+      //  linkItemData -> cost = linkItemData -> cost + currentPointingNode->value->pathCost;
         if(linkItemData->head->marked ==0 ){
             //pathLinkList = compareShortestPath(GraphPath * currentPointingNode,GraphPath * rootTree,Link * linkItemData)
             //compare inside the working AVL tree see there is any shorter path (then if yes overwrite linkItemData and input PathLink)
             //compareShortestPath(GraphPath * root,Link * linkItemData)
             //create pathLinks
           //  pathLink(Link * linkItemData)
-            sPath=createShortestPath(linkItemData,pathLinkList);  //graphNode value points to shortestPath struct
-            gNode =createGraphPath(sPath);
+            //graphNode value points to shortestPath struct
+            gNode =createGraphPath(createShortestPath(linkItemData,pathLinkList));
             root = avlAdd(root,(Node*)gNode,(Compare)graphCompare);
+            return NULL; // remember to remove
         }
     }
     return (GraphPath*)root;
 }
 
-*/
+
 // compare
 //compareShortestPath(starting node from beginning,working AVLTree , )
-
+/*
 List * compareShortestPath(GraphPath * currentPointingNode,GraphPath * rootTree,Link * linkItemData){
     ListItem * listItem;
     Link * newItemData;

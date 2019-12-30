@@ -8,7 +8,7 @@ GraphPath *createGraphPath(ShortestPath * value){
     graphPath->left = NULL;
     graphPath->right = NULL;
     graphPath->bFactor = 0;
-    graphPath->value = value;
+    graphPath->value = value; // can change to shortestPath
     return graphPath;
 }
 
