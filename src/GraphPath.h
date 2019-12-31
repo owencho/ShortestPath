@@ -16,9 +16,10 @@ struct GraphPath{
     GraphPath * left ;
     GraphPath * right ;
     int bFactor ;
-    ShortestPath * value ;
+    ShortestPath * sPath ;
 };
 
-GraphPath *createGraphPath(ShortestPath * value);
+GraphPath *createGraphPath(ShortestPath * sPath);
 ShortestPath *createShortestPath(Link * linkItemData, List * pathLinks);
+Link* createLinkFromShortestPath(ShortestPath * sPath);
 #endif // _GRAPHPATH_H

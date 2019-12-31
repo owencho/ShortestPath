@@ -20,14 +20,14 @@
 #include "GraphPath.h"
 #include "GraphCompare.h"
 
-ShortestPath sPath ,sPathD, sPathB;
+ShortestPath sPath ,sPathA,sPathC,sPathD, sPathB;
 GraphPath* root;
-GraphPath inNode;
+GraphPath inNode,gPathA,gPathB,gPathD;
 NetworkNode nodeA ,nodeB,nodeC,nodeD;
 Link linkItemDataA,linkItemDataD,linkItemDataB;
 ListItem itemA,itemB ,itemD;
 List linkList,pathDC, pathAC ,pathBC;
-
+GraphPath* root;
 
 
 void setUp(void){}
@@ -59,11 +59,11 @@ void initShortestPath(ShortestPath *sPath,NetworkNode * dst ,NetworkNode * src ,
     sPath->pathCost = pathCost;
     sPath->pathLinks = pathLinks;
 }
-void initGraphPath(GraphPath*graphPath,GraphPath*left,GraphPath*right,int bFactor, ShortestPath * value){
+void initGraphPath(GraphPath*graphPath,GraphPath*left,GraphPath*right,int bFactor, ShortestPath * sPath){
     graphPath->left = left;
     graphPath->right = right;
     graphPath->bFactor = bFactor;
-    graphPath->value = value;
+    graphPath->sPath = sPath;
 }
 
 /**
@@ -75,7 +75,7 @@ void initGraphPath(GraphPath*graphPath,GraphPath*left,GraphPath*right,int bFacto
 *                   2
 **/
 //all node without flag
-
+/*
 void test_getNearestNode(void){
     //create NetworkNode
     initNetworkNode(&nodeC,"nodeC",&linkList,0);
@@ -96,19 +96,19 @@ void test_getNearestNode(void){
     sPath.pathCost = 0; //fake inNode as nodeC
     inNode.value = &sPath;
     root=findNearestNode(&inNode,&nodeC);  //function
-    root=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompare);
+    root=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompareForAvlDelete);
     TEST_ASSERT_EQUAL(1,root->value->pathCost);
     TEST_ASSERT_EQUAL_PTR(&nodeA,root->value->dst);
     TEST_ASSERT_EQUAL_PTR(&nodeC,root->value->src);
     TEST_ASSERT_EQUAL_PTR(&pathAC,root->value->pathLinks);
 
-    root=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompare);
+    root=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompareForAvlDelete);
     TEST_ASSERT_EQUAL(2,root->value->pathCost);
     TEST_ASSERT_EQUAL_PTR(&nodeD,root->value->dst);
     TEST_ASSERT_EQUAL_PTR(&nodeC,root->value->src);
     TEST_ASSERT_EQUAL_PTR(&pathDC,root->value->pathLinks);
 
-    root=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompare);
+    root=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompareForAvlDelete);
     TEST_ASSERT_EQUAL(7,root->value->pathCost);
     TEST_ASSERT_EQUAL_PTR(&nodeB,root->value->dst);
     TEST_ASSERT_EQUAL_PTR(&nodeC,root->value->src);
@@ -220,6 +220,7 @@ GraphPath* root;
     TEST_ASSERT_NULL(root);
 }
 */
+
 /**
 *              3
 *         (A)------(B)                         (2)d           (2)d
@@ -230,11 +231,66 @@ GraphPath* root;
 **/
 //C is flagged
 
-void test_findGraphPath(void){
+void test_modifyGraphNodeWithShorterPath(void){
 NetworkNode nodeA ,nodeB,nodeC,nodeD;
 ShortestPath sPath ,sPathD, sPathB;
-GraphPath gPathB,gPathD;
+GraphPath gPathB,gPathA,gPathD;
+List  pathLinkCA,pathLinkCD,pathLinkCB,pathLinkCAB;
+ListItem listItemCA,listItemCB,listItemCD,listItemAB;
+Link linkCA,linkCB,linkCD,linkAB;
 GraphPath* root;
+    //create GraphPath
+    initShortestPath(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);
+    initGraphPath(&gPathD,NULL,&gPathB,1,&sPathD);
+    initShortestPath(&sPathB,&nodeB,&nodeC,7,&pathLinkCB);
+    initGraphPath(&gPathB,NULL,NULL,0,&sPathB);
+    initShortestPath(&sPathA,&nodeA,&nodeC,1,&pathLinkCA);
+    initGraphPath(&gPathA,NULL,NULL,0,&sPathA);
+    //init listItem
+    initListItem(&listItemCA, NULL,(void*)&linkCA);
+    initListItem(&listItemCB, NULL,(void*)&linkCB);
+    initListItem(&listItemCD, NULL,(void*)&linkCD);
+    initListItem(&listItemAB, NULL,(void*)&linkAB);
+    // init List
+    initList(&pathLinkCB,&listItemCB ,&listItemCB ,1 ,&listItemCB);
+    initList(&pathLinkCD,&listItemCD ,&listItemCD ,1 ,&listItemCD);
+    initList(&pathLinkCA,&listItemCA ,&listItemCA ,1 ,&listItemCA);
+    // init link item
+    initlinkItemData(&linkAB,&nodeB,&nodeA,3);
+    initlinkItemData(&linkCA,&nodeA,&nodeC,1);
+    initlinkItemData(&linkCB,&nodeB,&nodeC,7);
+    initlinkItemData(&linkCD,&nodeD,&nodeC,2);
+    //expected path
+
+    //modify B from 7 to 4
+    root=modifyGraphNodeWithShorterPath(&linkAB,&gPathD,&gPathB,&gPathA);
+    root=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompareForAvlDelete);
+    TEST_ASSERT_EQUAL(2,root->sPath->pathCost);
+    TEST_ASSERT_EQUAL_PTR(&nodeD,root->sPath->dst);
+    TEST_ASSERT_EQUAL_PTR(&nodeC,root->sPath->src);
+    TEST_ASSERT_EQUAL_PTR(&pathLinkCD,root->sPath->pathLinks);
+
+    root=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompareForAvlDelete);
+    TEST_ASSERT_EQUAL(4,root->sPath->pathCost);
+    TEST_ASSERT_EQUAL_PTR(&nodeB,root->sPath->dst);
+    TEST_ASSERT_EQUAL_PTR(&nodeC,root->sPath->src);
+    TEST_ASSERT_EQUAL_PTR(&pathLinkCAB,root->sPath->pathLinks);
+
+    TEST_ASSERT_NULL(root);
+}
+
+/**
+*              3
+*         (A)------(B)                         (2)d
+*        1 \     7 /                              \
+*           \    /                                (7)B
+*            (C)------(D)
+*                   2
+**/
+//current node points at A
+// nodeC is already marked
+
+void test_findGraphPath_on_right(void){
     //create GraphPath
     initShortestPath(&sPathD,&nodeD,&nodeC,2,NULL);
     initGraphPath(&gPathD,NULL,&gPathB,1,&sPathD);
@@ -243,4 +299,27 @@ GraphPath* root;
 
     root=findGraphPath(&gPathD,&nodeB);
     TEST_ASSERT_EQUAL_PTR(&gPathB,root);
+}
+
+/**
+*              3
+*         (A)------(B)          Working AVl        (2)d
+*        1 \     7 /           -->               /    \
+*           \    /                             (1)a   (7)B
+*            (C)------(D)
+*                   2
+**/
+//current node points on C
+
+void test_findGraphPath_on_left(void){
+    //create GraphPath
+    initShortestPath(&sPathD,&nodeD,&nodeC,2,NULL);
+    initGraphPath(&gPathD,&gPathA,&gPathB,0,&sPathD);
+    initShortestPath(&sPathB,&nodeB,&nodeC,7,NULL);
+    initGraphPath(&gPathB,NULL,NULL,0,&sPathB);
+    initShortestPath(&sPathA,&nodeA,&nodeC,7,NULL);
+    initGraphPath(&gPathA,NULL,NULL,0,&sPathA);
+
+    root=findGraphPath(&gPathD,&nodeA);
+    TEST_ASSERT_EQUAL_PTR(&gPathA,root);
 }

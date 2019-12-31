@@ -1,5 +1,6 @@
 #ifndef _GRAPHCOMPARE_H
 #define _GRAPHCOMPARE_H
 #include "GraphPath.h"
-int graphCompare (GraphPath *node, GraphPath * valuePtr);
+int graphCompareForAvlAdd (GraphPath *node, GraphPath * valuePtr);
+int graphCompareForAvlDelete (GraphPath *node, ShortestPath * sPath);
 #endif // _GRAPHCOMPARE_H

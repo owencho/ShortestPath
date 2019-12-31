@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include <string.h>
 
-GraphPath *createGraphPath(ShortestPath * value){
+GraphPath *createGraphPath(ShortestPath * sPath){
     GraphPath*graphPath= (GraphPath *)malloc(sizeof(GraphPath));
     graphPath->left = NULL;
     graphPath->right = NULL;
     graphPath->bFactor = 0;
-    graphPath->value = value; // can change to shortestPath
+    graphPath->sPath = sPath; // can change to shortestPath
     return graphPath;
 }
 
@@ -19,4 +19,12 @@ ShortestPath* createShortestPath(Link * linkItemData, List * pathLinks){
     sPath->pathCost = linkItemData->cost;
     sPath->pathLinks = pathLinks;
     return sPath;
+}
+
+Link* createLinkFromShortestPath(ShortestPath * sPath){
+    Link* linkItemData = (Link *)malloc(sizeof(Link));
+    linkItemData->head= sPath->dst ;
+    linkItemData->tail= sPath->src ;
+    linkItemData->cost= sPath->pathCost ;
+    return linkItemData;
 }
