@@ -21,83 +21,82 @@ Node * shortestPath(NetworkNode * nNode){
 
 */
 /*
-GraphPath* findNearestNode(GraphPath* graphRoot,NetworkNode * node){
+GraphPath* findNearestNode(GraphPath * currentPointingNode,GraphPath* graphRoot,NetworkNode * node){
     Node * root;
     List * nearestNodelinkList;
     List * pathLinkList;
     ListItem * listItem;
     Link * linkItemData;
     Node * inputNode;
-    GraphPath * gNode =(GraphPath *)malloc(sizeof(GraphPath)+sizeof(ShortestPath));
-    root = (Node *)graphRoot;
     nearestNodelinkList= getIteratorOfLinks(node);   //retreive the link list
     resetCurrentListItem(nearestNodelinkList);      // reset the linkList
 
     while(nearestNodelinkList->current !=NULL) {
         listItem = getNextListItem(nearestNodelinkList);
         linkItemData = (Link*)listItem->data;    //retreive the data with cost, head , tail
-      //  linkItemData -> cost = linkItemData -> cost + currentPointingNode->value->pathCost;
+        linkItemData -> cost = linkItemData -> cost + currentPointingNode->value->pathCost;
         if(linkItemData->head->marked ==0 ){
-            //pathLinkList = compareShortestPath(GraphPath * currentPointingNode,GraphPath * rootTree,Link * linkItemData)
+            root = compareAndAddShortestPath(currentPointingNode,graphRoot,linkItemData);
             //compare inside the working AVL tree see there is any shorter path (then if yes overwrite linkItemData and input PathLink)
-            //compareShortestPath(GraphPath * root,Link * linkItemData)
-            // pathLink(Link * linkItemData)
             //graphNode value points to shortestPath struct
-            gNode =createGraphPath(createShortestPath(linkItemData,pathLinkList));
-            root = avlAdd(root,(Node*)gNode,(Compare)graphCompare);
-            return NULL; // remember to remove
         }
     }
     return (GraphPath*)root;
 }
 
-*/
 
-/*
-List * compareShortestPath(GraphPath * currentPointingNode,GraphPath * rootTree,Link * linkItemData){
+*/
+// we know that the source is always at C , so we just need to find its destination
+// iterate through to find on the rootTree if not marked
+// return the GraphPath of destinated
+GraphPath* compareAndAddShortestPath(GraphPath * rootTree,GraphPath * currentPointingNode){
     ListItem * listItem;
     Link * newItemData;
     List * nearestNodelinkList;
+    List * pathLinkList;
     GraphPath *nodeOut;
-    nearestNodelinkList= getIteratorOfLinks(currentPointingNode->dst); //this might fail
+    nearestNodelinkList= getIteratorOfLinks(currentPointingNode->sPath->dst); //this might fail
+    resetCurrentListItem(nearestNodelinkList);
     listItem= getNextListItem(nearestNodelinkList);
     while(listItem != NULL){
         newItemData = (Link*)listItem->data;
-        if(newItemData->head->marked != 1){
+        if(newItemData->head->marked == 0){
             nodeOut = findGraphPath(rootTree, newItemData->head);
             if(nodeOut != NULL){
-                nodeOut=modifyGraphNodeWithShorterPath(GraphPath * rootTree,GraphPath * nodeOut,GraphPath * currentPointingNode);
+                rootTree=modifyGraphNodeWithShorterPath(newItemData,rootTree,nodeOut,currentPointingNode);
             }
-            // we know that the source is always at C , so we just need to find its destination
-            // iterate through to find on the rootTree if not marked
-            // return the GraphPath of destinated
-            // nodeOut =
+            else{
+                //create pathLink
+                newItemData -> cost = newItemData -> cost + currentPointingNode->sPath->pathCost;
+                nodeOut =createGraphPath(createShortestPath(newItemData,pathLinkList));
+                rootTree = (GraphPath *)avlAdd((Node*)rootTree,(Node*)nodeOut,(Compare)graphCompareForAvlAdd);
+            }
         }
+        listItem= getNextListItem(nearestNodelinkList);
     }
+    return rootTree;
 }
 // check is new route cost is smaller than pathCost
 // if yes then override the old pathCost
 // avlDelete it and add it back
-*/
-
 GraphPath* modifyGraphNodeWithShorterPath(Link*ListItemData,GraphPath * rootTree,GraphPath * nodeOut,GraphPath * currentPointingNode){
     double newPathCost;
-    ListItem * newListItem;
-    Link * newListItemData;
+    ListItem *newListItem;
     Node*root;
 
     newPathCost = ListItemData->cost + currentPointingNode->sPath->pathCost;
     if(nodeOut->sPath->pathCost > newPathCost){
         root = avlDelete((Node*)rootTree,(void*)nodeOut->sPath,(Compare)graphCompareForAvlDelete); //remove the old node that contain old data
         nodeOut->sPath->pathCost = newPathCost;
-        newListItemData = createLinkFromShortestPath(currentPointingNode->sPath);
-        newListItem -> data = (void*)newListItemData; // put Link
-        nodeOut->sPath->pathLinks = listAddItemToTail(nodeOut->sPath->pathLinks, newListItem);
+        nodeOut->sPath->pathLinks = NULL;
+        resetCurrentListItem(currentPointingNode->sPath->pathLinks);
+        nodeOut->sPath->pathLinks = currentPointingNode->sPath->pathLinks;
+        newListItem->data = (void*)ListItemData;
+        nodeOut->sPath->pathLinks = listAddItemToTail(nodeOut->sPath->pathLinks,newListItem);
         root = avlAdd(root,(Node*)nodeOut,(Compare)graphCompareForAvlAdd);
     }
     return (GraphPath*)root;
 }
-
 
 GraphPath* findGraphPath(GraphPath * root,NetworkNode * dstNode){
     GraphPath * graphNode = NULL;
@@ -115,13 +114,4 @@ GraphPath* findGraphPath(GraphPath * root,NetworkNode * dstNode){
             return graphNode;
     }
     return root;
-}
-
-GraphPath * avlRemoveSmallestGraphPath(GraphPath*root){
-    GraphPath * smallestNode = NULL;
-    GraphPath * outNode = NULL;
-    smallestNode = (GraphPath*)findSmallestNode((Node*)root);
-    outNode = (GraphPath*)avlDelete((Node*)root,smallestNode->sPath,(Compare)graphCompareForAvlDelete);
-    root = outNode;
-    return smallestNode;
 }

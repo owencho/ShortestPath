@@ -26,7 +26,7 @@ void initShortestPath(ShortestPath *sPath,NetworkNode * dst ,NetworkNode * src ,
     sPath->pathCost = pathCost;
     sPath->pathLinks = pathLinks;
 }
-/*
+
 void test_createShortestPath(void){
     NetworkNode nodeA;
     ListItem itemA;
@@ -40,6 +40,7 @@ void test_createShortestPath(void){
     TEST_ASSERT_NULL(graphPathNode->left);
     TEST_ASSERT_NULL(graphPathNode->right);
 }
+/*
 void test_createGraphPath(void){
     GraphPath graphPathNode;
     NetworkNode nodeA ,nodeC;

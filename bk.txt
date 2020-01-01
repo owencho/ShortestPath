@@ -47,3 +47,36 @@ void test_findNearestNode(void){
     root=findNearestNode(&nodeC,outList);
 
 }
+
+/*
+GraphPath* findNearestNode(GraphPath* graphRoot,NetworkNode * node){
+    Node * root;
+    List * nearestNodelinkList;
+    List * pathLinkList;
+    ListItem * listItem;
+    Link * linkItemData;
+    Node * inputNode;
+    root = (Node *)graphRoot;
+    nearestNodelinkList= getIteratorOfLinks(node);   //retreive the link list
+    resetCurrentListItem(nearestNodelinkList);      // reset the linkList
+
+    while(nearestNodelinkList->current !=NULL) {
+        listItem = getNextListItem(nearestNodelinkList);
+        linkItemData = (Link*)listItem->data;    //retreive the data with cost, head , tail
+      //  linkItemData -> cost = linkItemData -> cost + currentPointingNode->value->pathCost;
+        if(linkItemData->head->marked ==0 ){
+            //pathLinkList = compareShortestPath(GraphPath * currentPointingNode,GraphPath * rootTree,Link * linkItemData)
+            //compare inside the working AVL tree see there is any shorter path (then if yes overwrite linkItemData and input PathLink)
+            //compareShortestPath(GraphPath * root,Link * linkItemData)
+            // pathLink(Link * linkItemData)
+            //graphNode value points to shortestPath struct
+            gNode =createGraphPath(createShortestPath(linkItemData,pathLinkList));
+            root = avlAdd(root,(Node*)gNode,(Compare)graphCompare);
+            return NULL; // remember to remove
+        }
+    }
+    return (GraphPath*)root;
+}
+
+*/
+
