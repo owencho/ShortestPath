@@ -116,3 +116,12 @@ GraphPath* findGraphPath(GraphPath * root,NetworkNode * dstNode){
     }
     return root;
 }
+
+GraphPath * avlRemoveSmallestGraphPath(GraphPath*root){
+    GraphPath * smallestNode = NULL;
+    GraphPath * outNode = NULL;
+    smallestNode = (GraphPath*)findSmallestNode((Node*)root);
+    outNode = (GraphPath*)avlDelete((Node*)root,smallestNode->sPath,(Compare)graphCompareForAvlDelete);
+    root = outNode;
+    return smallestNode;
+}

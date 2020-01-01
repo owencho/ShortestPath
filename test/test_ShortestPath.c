@@ -235,10 +235,13 @@ void test_modifyGraphNodeWithShorterPath(void){
 NetworkNode nodeA ,nodeB,nodeC,nodeD;
 ShortestPath sPath ,sPathD, sPathB;
 GraphPath gPathB,gPathA,gPathD;
-List  pathLinkCA,pathLinkCD,pathLinkCB,pathLinkCAB;
+List  pathLinkCA,pathLinkCD,pathLinkCB;
 ListItem listItemCA,listItemCB,listItemCD,listItemAB;
+ListItem * outListItem;
 Link linkCA,linkCB,linkCD,linkAB;
-GraphPath* root;
+Link* linkItemData;
+GraphPath* root=NULL;
+GraphPath* smallestNode=NULL;
     //create GraphPath
     initShortestPath(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);
     initGraphPath(&gPathD,NULL,&gPathB,1,&sPathD);
@@ -264,19 +267,26 @@ GraphPath* root;
 
     //modify B from 7 to 4
     root=modifyGraphNodeWithShorterPath(&linkAB,&gPathD,&gPathB,&gPathA);
-    root=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompareForAvlDelete);
-    TEST_ASSERT_EQUAL(2,root->sPath->pathCost);
-    TEST_ASSERT_EQUAL_PTR(&nodeD,root->sPath->dst);
-    TEST_ASSERT_EQUAL_PTR(&nodeC,root->sPath->src);
-    TEST_ASSERT_EQUAL_PTR(&pathLinkCD,root->sPath->pathLinks);
+    smallestNode = (GraphPath*)findSmallestNode((Node*)root);
+    root = (GraphPath*)avlDelete((Node*)root,smallestNode->sPath,(Compare)graphCompareForAvlDelete);
+    TEST_ASSERT_EQUAL(2,smallestNode->sPath->pathCost);
+    TEST_ASSERT_EQUAL_PTR(&nodeD,smallestNode->sPath->dst);
+    TEST_ASSERT_EQUAL_PTR(&nodeC,smallestNode->sPath->src);
+    TEST_ASSERT_EQUAL_PTR(&pathLinkCD,smallestNode->sPath->pathLinks);
 
-    root=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompareForAvlDelete);
-    TEST_ASSERT_EQUAL(4,root->sPath->pathCost);
-    TEST_ASSERT_EQUAL_PTR(&nodeB,root->sPath->dst);
-    TEST_ASSERT_EQUAL_PTR(&nodeC,root->sPath->src);
-    TEST_ASSERT_EQUAL_PTR(&pathLinkCAB,root->sPath->pathLinks);
+    smallestNode = (GraphPath*)findSmallestNode((Node*)root);
+    root = (GraphPath*)avlDelete((Node*)root,smallestNode->sPath,(Compare)graphCompareForAvlDelete);
+    TEST_ASSERT_EQUAL(4,smallestNode->sPath->pathCost);
+    TEST_ASSERT_EQUAL_PTR(&nodeB,smallestNode->sPath->dst);
+    TEST_ASSERT_EQUAL_PTR(&nodeC,smallestNode->sPath->src);
 
-    TEST_ASSERT_NULL(root);
+    outListItem=getNextListItem(smallestNode->sPath->pathLinks);
+    linkItemData = outListItem->data;
+    TEST_ASSERT_EQUAL(&linkCA,linkItemData->cost);
+
+    outListItem=getNextListItem(smallestNode->sPath->pathLinks);
+    TEST_ASSERT_EQUAL_PTR(&linkAB,(Link*)outListItem->data);
+
 }
 
 /**
