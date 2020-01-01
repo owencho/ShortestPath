@@ -11,15 +11,17 @@
 /*
 Node * shortestPath(NetworkNode * nNode){
     List * linkList;
-    Node*root,smallestNode;
+    GraphPath*rootWorkingTree,finalShortestPathTree;
     //first time
+    //addGraphNode for the first time
     linkList=getIteratorOfLinks(&nNode);
+
     smallestNode=(GraphPath*)avlRemoveSmallest((Node*)root,(Compare)graphCompare);
     root = findNearestNode(Working AVLTree,root); //generate AvlTree with cost (not shortest path yet)
     //second time
     return root;
 
-*/
+
 /*
 GraphPath* findNearestNode(GraphPath * currentPointingNode,GraphPath* graphRoot,NetworkNode * node){
     Node * root;
@@ -66,8 +68,9 @@ GraphPath* compareAndAddShortestPath(GraphPath * rootTree,GraphPath * currentPoi
                 rootTree=modifyGraphNodeWithShorterPath(newItemData,rootTree,nodeOut,currentPointingNode);
             }
             else{
-                //create pathLink
                 newItemData -> cost = newItemData -> cost + currentPointingNode->sPath->pathCost;
+                pathLinkList=createLinkListForShortestPath(newItemData->head,newItemData->tail,newItemData -> cost);
+                //create pathLink (pathLinkList = createPathLinkList(newItemData->head,newItemData->tail,newItemData -> cost));
                 nodeOut =createGraphPath(createShortestPath(newItemData,pathLinkList));
                 rootTree = (GraphPath *)avlAdd((Node*)rootTree,(Node*)nodeOut,(Compare)graphCompareForAvlAdd);
             }
@@ -81,7 +84,7 @@ GraphPath* compareAndAddShortestPath(GraphPath * rootTree,GraphPath * currentPoi
 // avlDelete it and add it back
 GraphPath* modifyGraphNodeWithShorterPath(Link*ListItemData,GraphPath * rootTree,GraphPath * nodeOut,GraphPath * currentPointingNode){
     double newPathCost;
-    ListItem *newListItem;
+    ListItem *newListItem = (ListItem *)malloc(sizeof(ListItem));
     Node*root;
 
     newPathCost = ListItemData->cost + currentPointingNode->sPath->pathCost;
@@ -94,8 +97,11 @@ GraphPath* modifyGraphNodeWithShorterPath(Link*ListItemData,GraphPath * rootTree
         newListItem->data = (void*)ListItemData;
         nodeOut->sPath->pathLinks = listAddItemToTail(nodeOut->sPath->pathLinks,newListItem);
         root = avlAdd(root,(Node*)nodeOut,(Compare)graphCompareForAvlAdd);
+        return (GraphPath*)root;
     }
-    return (GraphPath*)root;
+    else
+        return rootTree;
+
 }
 
 GraphPath* findGraphPath(GraphPath * root,NetworkNode * dstNode){
@@ -114,4 +120,15 @@ GraphPath* findGraphPath(GraphPath * root,NetworkNode * dstNode){
             return graphNode;
     }
     return root;
+}
+
+GraphPath* addFirstGraphNodeIntoRootTree(NetworkNode * firstNode){
+    GraphPath * rootTree=(GraphPath *)malloc(sizeof(GraphPath));
+    List * firstGraphNodeList;
+    rootTree->sPath->dst = firstNode;
+    rootTree->sPath->src = firstNode;
+    rootTree->sPath->pathCost = 0;
+    firstGraphNodeList=createLinkListForShortestPath(firstNode,firstNode,0);
+    rootTree->sPath->pathLinks = firstGraphNodeList;
+    return rootTree;
 }

@@ -139,7 +139,7 @@ void assertEqualLink(const Link * actualLinkItemData,
         UNITY_TEST_FAIL(lineNumber,msg);
     }
     if(actualLinkItemData->cost != cost){
-        sprintf(msg,"Expected %.0f but encountered %.0f in actualShortestPath, the cost on from node %s to node %s is not the same",
+        sprintf(msg,"Expected %d but encountered %d in actualLinkItemData, the cost on from %s to  %s is not the same",
                 cost,actualLinkItemData->cost,actualLinkItemData->tail->name,actualLinkItemData->head->name);
         UNITY_TEST_FAIL(lineNumber,msg);
     }

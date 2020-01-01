@@ -28,3 +28,19 @@ Link* createLinkFromShortestPath(ShortestPath * sPath){
     linkItemData->cost= sPath->pathCost ;
     return linkItemData;
 }
+
+List* createLinkListForShortestPath(NetworkNode * head,NetworkNode * tail,int cost){
+    List * linkList = (List *)malloc(sizeof(List));
+    Link *listItemData= (Link *)malloc(sizeof(Link));
+    ListItem newListItem;
+    listItemData->head =head;
+    listItemData->tail =tail;
+    listItemData->cost =cost;
+    newListItem.data = (void*)listItemData;
+    linkList->head =NULL;
+    linkList->tail =NULL;
+    linkList->count =0;
+    linkList->current =NULL;
+    linkList=listAddItemToHead(linkList,&newListItem);
+    return linkList;
+}
