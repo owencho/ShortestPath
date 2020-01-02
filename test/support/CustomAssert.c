@@ -99,12 +99,12 @@ void assertEqualShortestPath(const ShortestPath * actualShortestPath,
                 pathCost,actualShortestPath->pathCost,actualShortestPath->src->name,actualShortestPath->dst->name);
         UNITY_TEST_FAIL(lineNumber,msg);
     }
-/*
+
     if(actualShortestPath->pathLinks != pathLinks){
         sprintf(msg,"Expected pathlink are different from the actual pathLinks");
         UNITY_TEST_FAIL(lineNumber,msg);
     }
-*/
+
 }
 
 void assertEqualLink(const Link * actualLinkItemData,

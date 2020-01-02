@@ -1,3 +1,4 @@
+#include "FindShortestPath.h"
 #include "unity.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -262,6 +263,7 @@ void test_compareAndAddShortestPath(void){
 **/
 //C is already checked
 //Assume B is not found in C and it force the node A to find B and add into the tree
+/*
 void test_compareAndAddShortestPath_to_add_B_into_the_working_tree(void){
     //create GraphPath
     initShortestPath(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);

@@ -1,4 +1,4 @@
-#include "ShortestPath.h"
+#include "FindShortestPath.h"
 #include "ShortestPath.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -71,8 +71,9 @@ GraphPath* compareAndAddShortestPath(GraphPath * rootTree,GraphPath * currentPoi
                 newItemData -> cost = newItemData -> cost + currentPointingNode->sPath->pathCost;
                 pathLinkList=createLinkListForShortestPath(newItemData->head,newItemData->tail,newItemData -> cost);
                 //create pathLink (pathLinkList = createPathLinkList(newItemData->head,newItemData->tail,newItemData -> cost));
-                nodeOut =createGraphPath(createShortestPath(newItemData,pathLinkList));
-                rootTree = (GraphPath *)avlAdd((Node*)rootTree,(Node*)nodeOut,(Compare)graphCompareForAvlAdd);
+                //below function will be overwrite by addGraphPathIntoPathCostAVL
+                //nodeOut =createGraphPath(createShortestPath(newItemData,pathLinkList));
+                //rootTree = (GraphPath *)avlAdd((Node*)rootTree,(Node*)nodeOut,(Compare)graphCompareForAvlAdd);
             }
         }
         listItem= getNextListItem(nearestNodelinkList);
