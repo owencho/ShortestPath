@@ -17,13 +17,13 @@
 #include "NetworkNode.h"
 #include "List.h"
 #include "ListItem.h"
-#include "ShortestPath.h"
+#include "ShortestPathNode.h"
 #include "GraphPath.h"
 #include "GraphCompare.h"
 #include "CustomAssert.h"
 
 NetworkNode nodeA ,nodeB,nodeC,nodeD;
-ShortestPath sPath,sPathA ,sPathD, sPathB;
+ShortestPathNode sPath,sPathA ,sPathD, sPathB;
 GraphPath gPathB,gPathA,gPathD;
 List  pathLinkCA,pathLinkCD,pathLinkCB,pathLinkCAB,linkListA,linkList;
 ListItem listItemCA,listItemAC,listItemCB,listItemCD,listItemAB;
@@ -58,13 +58,13 @@ void initlinkItemData(Link * linkItemData,NetworkNode * head ,NetworkNode * tail
     linkItemData->tail = tail;
     linkItemData->cost = cost;
 }
-void initShortestPath(ShortestPath *sPath,NetworkNode * dst ,NetworkNode * src ,double pathCost ,List * pathLinks){
+void initShortestPathNode(ShortestPathNode *sPath,NetworkNode * dst ,NetworkNode * src ,double pathCost ,List * pathLinks){
     sPath->dst = dst;
     sPath->src = src;
     sPath->pathCost = pathCost;
     sPath->pathLinks = pathLinks;
 }
-void initGraphPath(GraphPath*graphPath,GraphPath*left,GraphPath*right,int bFactor, ShortestPath * sPath){
+void initGraphPath(GraphPath*graphPath,GraphPath*left,GraphPath*right,int bFactor, ShortestPathNode * sPath){
     graphPath->left = left;
     graphPath->right = right;
     graphPath->bFactor = bFactor;
@@ -98,7 +98,7 @@ void test_getNearestNode(void){
     initNetworkNode(&nodeA,"nodeA",&linkList,0);
     initNetworkNode(&nodeB,"nodeB",&linkList,0);
     initNetworkNode(&nodeD,"nodeD",&linkList,0);
-    //init ShortestPath
+    //init ShortestPathNode
     initlinkItemData(&linkItemDataA,&nodeA ,&nodeC,1 );
     initlinkItemData(&linkItemDataD,&nodeD ,&nodeC,2 );
     initlinkItemData(&linkItemDataB,&nodeB ,&nodeC,7 );
@@ -150,10 +150,10 @@ void test_getNearestNode_withB_Flag(void){
     initNetworkNode(&nodeA,"nodeA",&linkList,0);
     initNetworkNode(&nodeB,"nodeB",&linkList,1);
     initNetworkNode(&nodeD,"nodeD",&linkList,0);
-    //init ShortestPath
-    initShortestPath(&sPathA,&nodeA ,&nodeC,1 ,&pathAC);
-    initShortestPath(&sPathD,&nodeD ,&nodeC,2 ,&pathDC);
-    initShortestPath(&sPathB,&nodeB ,&nodeC,7 ,&pathBC);
+    //init ShortestPathNode
+    initShortestPathNode(&sPathA,&nodeA ,&nodeC,1 ,&pathAC);
+    initShortestPathNode(&sPathD,&nodeD ,&nodeC,2 ,&pathDC);
+    initShortestPathNode(&sPathB,&nodeB ,&nodeC,7 ,&pathBC);
     //create List Item
     initListItem(&itemA, &itemB ,(void*)&sPathA);
     initListItem(&itemB, &itemD ,(void*)&sPathB);
@@ -192,11 +192,11 @@ void test_getNearestNode_withB_Flag(void){
 
 void test_compareAndAddShortestPath(void){
     //create GraphPath
-    initShortestPath(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);
+    initShortestPathNode(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);
     initGraphPath(&gPathD,NULL,&gPathB,1,&sPathD);
-    initShortestPath(&sPathB,&nodeB,&nodeC,7,&pathLinkCB);
+    initShortestPathNode(&sPathB,&nodeB,&nodeC,7,&pathLinkCB);
     initGraphPath(&gPathB,NULL,NULL,0,&sPathB);
-    initShortestPath(&sPathA,&nodeA,&nodeC,1,&pathLinkCA);
+    initShortestPathNode(&sPathA,&nodeA,&nodeC,1,&pathLinkCA);
     initGraphPath(&gPathA,NULL,NULL,0,&sPathA);
     //init listItem
     initListItem(&listItemCA, &listItemAB,(void*)&linkCA);
@@ -266,11 +266,11 @@ void test_compareAndAddShortestPath(void){
 /*
 void test_compareAndAddShortestPath_to_add_B_into_the_working_tree(void){
     //create GraphPath
-    initShortestPath(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);
+    initShortestPathNode(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);
     initGraphPath(&gPathD,NULL,NULL,1,&sPathD);
-    initShortestPath(&sPathB,&nodeB,&nodeC,7,&pathLinkCB);
+    initShortestPathNode(&sPathB,&nodeB,&nodeC,7,&pathLinkCB);
     initGraphPath(&gPathB,NULL,NULL,0,&sPathB);
-    initShortestPath(&sPathA,&nodeA,&nodeC,1,&pathLinkCA);
+    initShortestPathNode(&sPathA,&nodeA,&nodeC,1,&pathLinkCA);
     initGraphPath(&gPathA,NULL,NULL,0,&sPathA);
     //init listItem
     initListItem(&listItemCA, &listItemAB,(void*)&linkCA);
@@ -329,7 +329,7 @@ void test_compareAndAddShortestPath_to_add_B_into_the_working_tree(void){
 //modifyGraphNodeWithShorterPath(Link*ListItemData,GraphPath * rootTree,
 //GraphPath * nodeOut,GraphPath * currentPointingNode)
 //ListItemData is the data that retreived from the linklistItem of nearest node
-// rootTree is the working AVLtree that havent been checked for shortestPath
+// rootTree is the working AVLtree that havent been checked for ShortestPathNode
 // the nodeOut is the node is going to check is the new path is better than the old path
 // the currentPointingNode is used to compare the pathCost and add the pathLink if
 // the new path is better than the original one
@@ -347,11 +347,11 @@ void test_compareAndAddShortestPath_to_add_B_into_the_working_tree(void){
 // C is already checked so didnt added into the rootTree
 void test_modifyGraphNodeWithShorterPath(void){
     //create GraphPath
-    initShortestPath(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);
+    initShortestPathNode(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);
     initGraphPath(&gPathD,NULL,&gPathB,1,&sPathD);
-    initShortestPath(&sPathB,&nodeB,&nodeC,7,&pathLinkCB);
+    initShortestPathNode(&sPathB,&nodeB,&nodeC,7,&pathLinkCB);
     initGraphPath(&gPathB,NULL,NULL,0,&sPathB);
-    initShortestPath(&sPathA,&nodeA,&nodeC,1,&pathLinkCA);
+    initShortestPathNode(&sPathA,&nodeA,&nodeC,1,&pathLinkCA);
     initGraphPath(&gPathA,NULL,NULL,0,&sPathA);
     // init link item
     initlinkItemData(&linkAB,&nodeB,&nodeA,3);
@@ -413,11 +413,11 @@ void test_modifyGraphNodeWithShorterPath(void){
 
 void test_modifyGraphNodeWithShorterPath_for_new_pathcost_longer_than_old_pathCost(void){
     //create GraphPath
-    initShortestPath(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);
+    initShortestPathNode(&sPathD,&nodeD,&nodeC,2,&pathLinkCD);
     initGraphPath(&gPathD,NULL,&gPathB,1,&sPathD);
-    initShortestPath(&sPathB,&nodeB,&nodeC,3,&pathLinkCB);
+    initShortestPathNode(&sPathB,&nodeB,&nodeC,3,&pathLinkCB);
     initGraphPath(&gPathB,NULL,NULL,0,&sPathB);
-    initShortestPath(&sPathA,&nodeA,&nodeC,1,&pathLinkCA);
+    initShortestPathNode(&sPathA,&nodeA,&nodeC,1,&pathLinkCA);
     initGraphPath(&gPathA,NULL,NULL,0,&sPathA);
     // init link item
     initlinkItemData(&linkAB,&nodeB,&nodeA,3);
@@ -476,9 +476,9 @@ void test_modifyGraphNodeWithShorterPath_for_new_pathcost_longer_than_old_pathCo
 
 void test_findGraphPath_on_right(void){
     //create GraphPath
-    initShortestPath(&sPathD,&nodeD,&nodeC,2,NULL);
+    initShortestPathNode(&sPathD,&nodeD,&nodeC,2,NULL);
     initGraphPath(&gPathD,NULL,&gPathB,1,&sPathD);
-    initShortestPath(&sPathB,&nodeB,&nodeC,7,NULL);
+    initShortestPathNode(&sPathB,&nodeB,&nodeC,7,NULL);
     initGraphPath(&gPathB,NULL,NULL,0,&sPathB);
 
     root=findGraphPath(&gPathD,&nodeB);
@@ -497,11 +497,11 @@ void test_findGraphPath_on_right(void){
 
 void test_findGraphPath_on_left(void){
     //create GraphPath
-    initShortestPath(&sPathD,&nodeD,&nodeC,2,NULL);
+    initShortestPathNode(&sPathD,&nodeD,&nodeC,2,NULL);
     initGraphPath(&gPathD,&gPathA,&gPathB,0,&sPathD);
-    initShortestPath(&sPathB,&nodeB,&nodeC,7,NULL);
+    initShortestPathNode(&sPathB,&nodeB,&nodeC,7,NULL);
     initGraphPath(&gPathB,NULL,NULL,0,&sPathB);
-    initShortestPath(&sPathA,&nodeA,&nodeC,7,NULL);
+    initShortestPathNode(&sPathA,&nodeA,&nodeC,7,NULL);
     initGraphPath(&gPathA,NULL,NULL,0,&sPathA);
 
     root=findGraphPath(&gPathD,&nodeA);

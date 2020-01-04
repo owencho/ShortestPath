@@ -1,5 +1,5 @@
 #include "FindShortestPath.h"
-#include "ShortestPath.h"
+#include "ShortestPathNode.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include "AvlAdd.h"

@@ -3,7 +3,7 @@
 #include "NetworkNode.h"
 #include "List.h"
 #include "ListItem.h"
-#include "ShortestPath.h"
+#include "ShortestPathNode.h"
 typedef struct GraphPath GraphPath ;
 
 struct GraphPath{
@@ -11,6 +11,6 @@ struct GraphPath{
     GraphPath * right ;
     int bFactor ;
     List * listWithSameCost ;
-    ShortestPath * sPath ;
+    ShortestPathNode * sPath ;
 };
 #endif // _GRAPHPATH_H
