@@ -13,20 +13,30 @@ GraphPath * rootTreePathCost = NULL;
 GraphPath * rootTreeNodeName = NULL; //to store gPath but sorted by destination of that gPath
 CEXCEPTION_T ex;
 
-GraphPath *createGraphPath(ShortestPath * sPath){
+GraphPath *createGraphPath(ShortestPathNode * sPath){
     GraphPath*graphPath= (GraphPath *)malloc(sizeof(GraphPath));
     graphPath->left = NULL;
     graphPath->right = NULL;
     graphPath->bFactor = 0;
-    graphPath->listWithSameCost = NULL;
+    graphPath->listWithSameCost = createList();
     graphPath->sPath = sPath;
     return graphPath;
 }
 
-void * addGraphPathIntoPathCostAVL(ShortestPath * sPath){
+List *createList(void){
+    List * list = (List *)malloc(sizeof(List));
+    list->head = NULL;
+    list->tail = NULL;
+    list->current = NULL;
+    list->count = 0;
+    list->previous = NULL;
+    return list;
+}
+
+void * addGraphPathIntoPathCostAVL(ShortestPathNode * sPath){
     GraphPath * gNode;
     GraphPath * newGPath;
-    ListItem * newlistItem;
+    ListItem * newListItem = (ListItem *)malloc(sizeof(ListItem));
     if(rootTreePathCost == NULL){
         rootTreePathCost = createGraphPath(sPath);
     }
@@ -38,21 +48,35 @@ void * addGraphPathIntoPathCostAVL(ShortestPath * sPath){
                                (Compare)graphCompareForPathCostAvlAdd);
         }Catch(ex){
             gNode= getGraphPathFromPathCost(sPath->pathCost);
-            newlistItem->data = (void*)newGPath;
-            gNode->listWithSameCost = listAddItemToHead(gNode->listWithSameCost, newlistItem );
+            newListItem->data = (void*)newGPath;
+            gNode->listWithSameCost = listAddItemToHead(gNode->listWithSameCost,newListItem);
+            resetCurrentListItem(gNode->listWithSameCost);
         }
     }
     return rootTreePathCost;
 }
 
-void * deleteGraphPathFromPathCostAVL(double pathCost,char * name){
+void * deleteGraphPathFromPathCostAVL(int pathCost,char * name){
     GraphPath * gPath;
     ListItem * sameCostItem;
     GraphPath * sameCostGPath;
     gPath = getGraphPathFromPathCost(pathCost);
-    if(strcmp(gPath->sPath->id->name ,name)==0){
+
+    if(gPath == NULL){
+        throwException(ERR_NODE_NOT_FOUND," %s with pathCost of %d cant found inside the tree",name,pathCost);
+    }
+    else if(strcmp(gPath->sPath->id->name ,name)==0){
         rootTreePathCost = (GraphPath*)avlDelete((Node*)rootTreePathCost,
                            (void*)&pathCost,(Compare)graphCompareForPathCost);
+        if(gPath->listWithSameCost->count !=0){
+            //call a function to check
+            // GraphPath * overridePath =  gPath->listWithSameCost->head->data;
+            // remove head listItem(gPath->listWithSameCost)
+            // overridePath->listWithSameCost =gPath->listWithSameCost
+            // add back this node into Tree
+            //addGraphPathIntoPathCostAVL(overridePath);
+            //
+        }
     }
     else if(gPath->listWithSameCost->count !=0){
         resetCurrentListItem(gPath->listWithSameCost);
@@ -69,13 +93,15 @@ void * deleteGraphPathFromPathCostAVL(double pathCost,char * name){
     return rootTreePathCost;
 }
 
-GraphPath * getGraphPathFromPathCost(double pathCost){
+
+
+GraphPath * getGraphPathFromPathCost(int pathCost){
     GraphPath node = *rootTreePathCost;
     return _getGraphPath((void*)&pathCost,&node,(Compare)graphCompareForPathCost);
 }
 
 ///Working Tree for PATH NAME//////////////////////////////////////////////////////////////////
-void * addGraphPathIntoPathNameAVL(ShortestPath * sPath){
+void * addGraphPathIntoPathNameAVL(ShortestPathNode * sPath){
     GraphPath * gNode;
     ListItem * newItem;
     if(rootTreeNodeName == NULL){

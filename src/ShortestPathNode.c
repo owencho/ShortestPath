@@ -1,10 +1,11 @@
 #include "ShortestPathNode.h"
+#include <stdlib.h>
 
-ShortestPath* createShortestPath(Link * linkItemData, List * pathLinks){
-    ShortestPath* sPath = (ShortestPath *)malloc(sizeof(ShortestPath));
-    sPath->dst = linkItemData->head;
-    sPath->src = linkItemData->tail;
-    sPath->pathCost = linkItemData->cost;
-    sPath->pathLinks = pathLinks;
+ShortestPathNode* createShortestPath(ShortestPathNode * parent, Link * linkItemData){
+    ShortestPathNode* sPath = (ShortestPathNode *)malloc(sizeof(ShortestPathNode));
+    sPath->id = linkItemData->head;
+    sPath->parent = parent;
+    sPath->pathCost = linkItemData->cost + parent->pathCost ;
+    sPath->linkCost = linkItemData->cost;
     return sPath;
 }

@@ -35,8 +35,9 @@ int graphCompareForName (GraphPath *node, char * name){
     return 0;
 }
 
-int graphCompareForSameCostList (GraphPath *node, GraphPath * pathPtr){
-    if(strcmp(node->sPath->id->name ,pathPtr->sPath->id->name)==0)
+int graphCompareForSameCostList (ListItem *listItem, GraphPath * pathPtr){
+    GraphPath * gPath = listItem->data;
+    if(strcmp(gPath->sPath->id->name ,pathPtr->sPath->id->name)==0)
         return 1;
     return 0;
 }

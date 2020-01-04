@@ -12,4 +12,5 @@ struct ShortestPathNode{
     int pathCost ;
 };
 
+ShortestPathNode* createShortestPath(ShortestPathNode * parent, Link * linkItemData);
 #endif // _SHORTESTPATHNODE_H

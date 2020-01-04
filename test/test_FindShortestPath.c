@@ -58,12 +58,13 @@ void initlinkItemData(Link * linkItemData,NetworkNode * head ,NetworkNode * tail
     linkItemData->tail = tail;
     linkItemData->cost = cost;
 }
-void initShortestPathNode(ShortestPathNode *sPath,NetworkNode * dst ,NetworkNode * src ,double pathCost ,List * pathLinks){
-    sPath->dst = dst;
-    sPath->src = src;
+void initShortestPathNode(ShortestPathNode *sPath,NetworkNode * id ,ShortestPathNode * parent ,int pathCost ,int linkCost){
+    sPath->id = id;
+    sPath->parent = parent;
     sPath->pathCost = pathCost;
-    sPath->pathLinks = pathLinks;
+    sPath->linkCost = linkCost;
 }
+
 void initGraphPath(GraphPath*graphPath,GraphPath*left,GraphPath*right,int bFactor, ShortestPathNode * sPath){
     graphPath->left = left;
     graphPath->right = right;
