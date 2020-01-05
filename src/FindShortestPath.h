@@ -7,5 +7,4 @@
 GraphPath* findNearestNode(GraphPath* graphRoot,NetworkNode * node);
 GraphPath* compareAndAddShortestPath(GraphPath * rootTree,GraphPath * currentPointingNode);
 GraphPath* modifyGraphNodeWithShorterPath(Link*ListItemData,GraphPath * rootTree,GraphPath * nodeOut,GraphPath * currentPointingNode);
-GraphPath* findGraphPath(GraphPath * root,NetworkNode * dstNode);
 #endif // _FINDSHORTESTPATH_H

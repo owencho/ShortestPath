@@ -5,12 +5,14 @@
 #include "NetworkNode.h"
 #include "List.h"
 #include "Compare.h"
+#include "LinkListCompare.h"
 
 NetworkNode nodeA , nodeB;
 ShortestPathNode sPathRoot ,sPathNode;
 GraphPath root,inputNode;
 GraphPath * inNode;
 List * pathLinks;
+ListItem  listItem;
 void setUp(void){}
 
 void tearDown(void){}
@@ -160,25 +162,25 @@ void test_graphCompareForName_input_same_node(void){
 }
 
 void test_graphCompareForSameCostList_different_name_return_0(void){
-    Compare compare = (Compare)graphCompareForSameCostList;
+    LinkListCompare compare = (LinkListCompare)graphCompareForSameCostList;
     initNetworkNode(&nodeA,"nodeA",NULL,0);
     initNetworkNode(&nodeB,"nodeB",NULL,0);
     initShortestPathNode(&sPathRoot,&nodeA ,NULL,1,1);
     initShortestPathNode(&sPathNode,&nodeB ,NULL,2,2);
     root.sPath = &sPathRoot;
     inputNode.sPath = &sPathNode;
-    inNode = &inputNode;
-    TEST_ASSERT_EQUAL(0,(compare((Node*)&root,(void *)inNode)));
+    listItem.data = (void*)&inputNode;
+    TEST_ASSERT_EQUAL(0,(compare(&listItem,(void *)&root)));
 }
 
 void test_graphCompareForSameCostList_same_name_return_1(void){
-    Compare compare = (Compare)graphCompareForSameCostList;
+    LinkListCompare compare = (LinkListCompare)graphCompareForSameCostList;
     initNetworkNode(&nodeA,"nodeA",NULL,0);
     initNetworkNode(&nodeB,"nodeB",NULL,0);
     initShortestPathNode(&sPathRoot,&nodeA ,NULL,1,1);
     initShortestPathNode(&sPathNode,&nodeA ,NULL,2,2);
     root.sPath = &sPathRoot;
     inputNode.sPath = &sPathNode;
-    inNode = &inputNode;
-    TEST_ASSERT_EQUAL(1,(compare((Node*)&root,(void *)inNode)));
+    listItem.data = (void*)&inputNode;
+    TEST_ASSERT_EQUAL(1,(compare(&listItem,(void *)&root)));
 }
