@@ -7,6 +7,7 @@
 #include <string.h>
 #include "Exception.h"
 #include "Error.h"
+#include "List.h"
 #include "CException.h"
 
 GraphPath * rootTreePathCost = NULL;
@@ -23,15 +24,6 @@ GraphPath *createGraphPath(ShortestPathNode * sPath){
     return graphPath;
 }
 
-List *createList(void){
-    List * list = (List *)malloc(sizeof(List));
-    list->head = NULL;
-    list->tail = NULL;
-    list->current = NULL;
-    list->count = 0;
-    list->previous = NULL;
-    return list;
-}
 //main function
 void * addGraphPathIntoWorkingAVL(ShortestPathNode * sPath){
     addGraphPathIntoPathCostAVL(sPath);
