@@ -33,14 +33,16 @@ List *createList(void){
     return list;
 }
 //main function
-void addGraphPathIntoWorkingAVL(ShortestPathNode * sPath){
+void * addGraphPathIntoWorkingAVL(ShortestPathNode * sPath){
     addGraphPathIntoPathCostAVL(sPath);
     addGraphPathIntoPathNameAVL(sPath);
+    return rootTreePathCost;
 }
 
-void deleteGraphPathFromWorkingAVL(ShortestPathNode * sPath){
+void * deleteGraphPathFromWorkingAVL(ShortestPathNode * sPath){
     deleteGraphPathFromPathCostAVL(sPath->pathCost,sPath->id->name);
     deleteGraphPathFromPathNameAVL(sPath->id->name);
+    return rootTreePathCost;
 }
 
 void resetWorkingAVL(void){

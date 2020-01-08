@@ -8,60 +8,58 @@
 #include "NetworkNode.h"
 #include "List.h"
 #include "ListItem.h"
+#include "GraphPathAVL.h"
 
-List * findShortestPath(NetworkNode * nNode){
+List * generateShortestPath(NetworkNode * nNode){
     GraphPath * gPathNode;
-    List * linklist;
+    List * linkList;
     resetWorkingAVL();
-    addGraphPathIntoWorkingAVL(initFirstShortestPath(nNode));
-    gPathNode = findSmallestPathCostFromAVL();
-    while(gPathNode != NULL){
-        deleteGraphPathFromWorkingAVL(gPathNode->sPath);
-        findAndAddNearestNode(gPathNode);
-        linklist = addMarkedNodeIntoLinkList(sPath);
-        gPathNode = findSmallestPathCostFromAVL();
+    linkList = createList(); //initialize the list for shortestPath
+    addGraphPathIntoWorkingAVL(createFirstShortestPath(nNode)); //add source node into working Tree
+    gPathNode = findSmallestPathCostFromAVL();   //find the smallestNode (source Node)
+    while(gPathNode != NULL){ //find the smallest gPathNode until the root tree is NULL
+        deleteGraphPathFromWorkingAVL(gPathNode->sPath); //found and then delete the gPath from both tree
+        findAndAddNearestNode(gPathNode); //find the NearestNode and Add into working Tree
+        gPathNode->sPath->id->marked = 1;  //mark the current pointed networkNode as checked
+        linkList = listAddItemToHead(linkList, createListItem((void*)gPathNode->sPath)); //after marked then add shortestPath into Spath LinkList
+        gPathNode = findSmallestPathCostFromAVL(); //find the smallestNode
     }
-    return linklist;
+    return linkList;
 }
+
+
 
 void * findAndAddNearestNode(GraphPath* graphPath){
     List * nearestNodelinkList;
     ListItem * listItem;
     Link * linkItemData;
     ShortestPathNode * sPathToAdd;
-    nearestNodelinkList= getIteratorOfLinks(graphPath->id);   //retreive the link list
+    nearestNodelinkList= getIteratorOfLinks(graphPath->sPath->id);   //retreive the link list
     resetCurrentListItem(nearestNodelinkList);      // reset the linkList
-
-    while(nearestNodelinkList->current !=NULL) {
-        listItem = getNextListItem(nearestNodelinkList);
+    listItem = getCurrentListItem(nearestNodelinkList);
+    while(listItem !=NULL) { //add all listItem until the link points to NULL
         linkItemData = (Link*)listItem->data;    //retreive the data with cost, head , tail
-        sPathToAdd= createShortestPathFromLinkItemData(graphPath->parent,linkItemData);
-        compareAndAddShortestPath(sPathToAdd);
+        sPathToAdd= createShortestPathFromLinkItemData(graphPath->sPath->parent,linkItemData); //create the shortestPath from linkListItemData
+        compareAndAddShortestPathIntoWorkingAVL(sPathToAdd); //compare the previous and new pathCost and add into the working Tree
+        listItem = getNextListItem(nearestNodelinkList);
     }
     return sPathToAdd;
 }
 
-// we know that the source is always at C , so we just need to find its destination
-// iterate through to find on the rootTree if not marked
-// return the GraphPath of destinated
-void* compareAndAddShortestPath(ShortestPathNode * sPathToAdd){
+// ask dr Poh about this
+void* compareAndAddShortestPathIntoWorkingAVL(ShortestPathNode * sPathToAdd){
     GraphPath * gPath;
+    GraphPath * rootTree;
+    int pathCostCompare;
     if(sPathToAdd->id->marked ==0 ){
         gPath = getGraphPathFromNodeName(sPathToAdd->id->name);
-        if(gPath->sPath->pathCost > sPathToAdd->pathCost){
-            deleteGraphPathFromWorkingAVL(gPath->sPath);
+        if(gPath != NULL){
+            if(gPath->sPath->pathCost > sPathToAdd->pathCost)
+                deleteGraphPathFromWorkingAVL(gPath->sPath);
+            else
+                return gPath;
         }
-        addGraphPathIntoWorkingAVL(sPathToAdd);
+        return addGraphPathIntoWorkingAVL(sPathToAdd);
     }
-    return gPath;
-}
-
-GraphPath* initFirstShortestPath(NetworkNode * firstNode){
-    GraphPath * rootTree=(GraphPath *)malloc(sizeof(GraphPath));
-    List * firstGraphNodeList;
-    sPath->id = firstNode;
-    sPath->parent = NULL;
-    sPath->pathCost = 0;
-    sPath->pathLinks = 0;
-    return sPath;
+    return NULL;
 }

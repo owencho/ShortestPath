@@ -7,8 +7,8 @@ GraphPath *createGraphPath(ShortestPathNode * sPath);
 GraphPath * _getGraphPath(void * valuePtr,GraphPath * root,Compare compare);
 List *createList(void); //move to LinkList pls
 //Main Function
-void addGraphPathIntoWorkingAVL(ShortestPathNode * sPath);
-void deleteGraphPathFromWorkingAVL(ShortestPathNode * sPath);
+void *addGraphPathIntoWorkingAVL(ShortestPathNode * sPath);
+void *deleteGraphPathFromWorkingAVL(ShortestPathNode * sPath);
 void resetWorkingAVL(void);
 //Working Tree for PathCost
 void * addGraphPathIntoPathCostAVL(ShortestPathNode * sPath);

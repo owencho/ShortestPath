@@ -3,8 +3,8 @@
 #include "GraphPath.h"
 #include "Node.h"
 #include "GraphCompare.h"
-//Node * shortestPath(Node* root,Compare compare);
-GraphPath* findNearestNode(GraphPath* graphRoot,NetworkNode * node);
-GraphPath* compareAndAddShortestPath(GraphPath * rootTree,GraphPath * currentPointingNode);
-GraphPath* modifyGraphNodeWithShorterPath(Link*ListItemData,GraphPath * rootTree,GraphPath * nodeOut,GraphPath * currentPointingNode);
+List * generateShortestPath(NetworkNode * nNode);
+void* compareAndAddShortestPathIntoWorkingAVL(ShortestPathNode * sPathToAdd);
+void * findAndAddNearestNode(GraphPath* graphPath);
+
 #endif // _FINDSHORTESTPATH_H

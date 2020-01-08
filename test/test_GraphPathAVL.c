@@ -22,11 +22,13 @@
 #include "GraphCompare.h"
 #include "CustomAssert.h"
 NetworkNode nodeA,nodeB,nodeC,nodeD;
-ListItem itemA;
-List linkListA;
-Link  listItemDataA;
-Link *outLink;
 ShortestPathNode sPathA,sPathB,sPathC,sPath0,sPathD,sPathE,sPathF,sPathG,sPath;
+GraphPath * graphPathCost;
+GraphPath * graphPathNode;
+GraphPath * graphPathName;
+ListItem * outListItem;
+GraphPath * listGraphPath;
+GraphPath * gPath;
 CEXCEPTION_T ex;
 void setUp(void){}
 void tearDown(void){}
@@ -61,7 +63,10 @@ void initShortestPathNode(ShortestPathNode *sPath,NetworkNode * id ,ShortestPath
 }
 
 void test_createGraphPath(void){
+    List linkListA;
     GraphPath * graphPathNode;
+    ListItem itemA;
+    Link  listItemDataA;
     initLink(&listItemDataA,0,&nodeA ,&nodeA);
     initList(&linkListA, &itemA ,NULL,1 ,&itemA);
     initShortestPathNode(&sPath,&nodeA ,NULL,1,1);
@@ -84,9 +89,6 @@ void test_createGraphPath(void){
 *                                 nodeA
 **/
 void test_addGraphPathIntoWorkingAVL(void){
-    GraphPath * graphPathCost;
-    GraphPath * graphPathName;
-    ListItem * outListItem;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -122,10 +124,10 @@ void test_addGraphPathIntoWorkingAVL(void){
         TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathName->left->sPath,&nodeA,NULL,2,2);
         TEST_ASSERT_EQUAL(0,graphPathName->left->bFactor);
         TEST_ASSERT_NULL(graphPathName->right);
-      }Catch(ex) {
-          dumpException(ex);
-          TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
-      }
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
 
 }
 
@@ -141,9 +143,6 @@ void test_addGraphPathIntoWorkingAVL(void){
 *                                 nodeA
 **/
 void test_deleteGraphPathFromWorkingAVL(void){
-    GraphPath * graphPathCost;
-    GraphPath * graphPathName;
-    ListItem * outListItem;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -170,10 +169,10 @@ void test_deleteGraphPathFromWorkingAVL(void){
         TEST_ASSERT_NULL(graphPathCost);
         graphPathName = getGraphPathFromNodeName(sPathB.id->name);
         TEST_ASSERT_NULL(graphPathName);
-      }Catch(ex) {
-          dumpException(ex);
-          TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
-      }
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
 
 }
 ////PathCost/////////////////////////////////////////////////////
@@ -186,9 +185,6 @@ void test_deleteGraphPathFromWorkingAVL(void){
 *                                         (2)B
 **/
 void test_addGraphPathIntoPathCostAVL_with_same_cost(void){
-    GraphPath * graphPathNode;
-    GraphPath * listGraphPath;
-    ListItem * outListItem;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -215,16 +211,19 @@ void test_addGraphPathIntoPathCostAVL_with_same_cost(void){
     TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeA,NULL,2,2);
     TEST_ASSERT_NULL(graphPathNode->left);
     TEST_ASSERT_NULL(graphPathNode->right);
+    // expect C on the listWithSameCost
     outListItem= getCurrentListItem(graphPathNode->listWithSameCost);
     listGraphPath = outListItem->data;
     TEST_ASSERT_EQUAL_SHORTEST_PATH(listGraphPath->sPath,&nodeC,NULL,2,2);
+    // expect B on the listWithSameCost
     outListItem= getNextListItem(graphPathNode->listWithSameCost);
     listGraphPath = outListItem->data;
     TEST_ASSERT_EQUAL_SHORTEST_PATH(listGraphPath->sPath,&nodeB,NULL,2,2);
+    // expect NULL as the list is already ended  on the listWithSameCost
     outListItem= getNextListItem(graphPathNode->listWithSameCost);
     TEST_ASSERT_NULL(outListItem);
 }
-
+//This function will return the head of the listWithSameCost if the graphPath has same pathCost item inside
 /**
 *
 *                            (2)a          (2)a
@@ -234,9 +233,6 @@ void test_addGraphPathIntoPathCostAVL_with_same_cost(void){
 *                                         (2)B
 **/
 void test_findSmallestPathCostFromAVL_with_same_cost(void){
-    GraphPath * graphPathNode;
-    GraphPath * listGraphPath;
-    ListItem * outListItem;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -256,7 +252,6 @@ void test_findSmallestPathCostFromAVL_with_same_cost(void){
 *
 **/
 void test_addGraphPathIntoPathCostAVL(void){
-    GraphPath * graphPathNode;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -284,7 +279,6 @@ void test_addGraphPathIntoPathCostAVL(void){
 *
 **/
 void test_getGraphPathFromPathCost(void){
-    GraphPath * graphPathNode;
     initShortestPathNode(&sPathC,&nodeC ,NULL,3,3);
     initShortestPathNode(&sPathA,&nodeA ,NULL,2,2);
     initShortestPathNode(&sPathB,&nodeB ,NULL,1,1);
@@ -301,7 +295,6 @@ void test_getGraphPathFromPathCost(void){
 *
 **/
 void test_getGraphPathFromPathCost_find_B(void){
-    GraphPath * graphPathNode;
     initShortestPathNode(&sPathC,&nodeC ,NULL,3,3);
     initShortestPathNode(&sPathA,&nodeA ,NULL,2,2);
     initShortestPathNode(&sPathB,&nodeB ,NULL,1,1);
@@ -319,7 +312,6 @@ void test_getGraphPathFromPathCost_find_B(void){
 *    (0)path0
 **/
 void test_getGraphPathFromPathCost_find_0(void){
-    GraphPath * graphPathNode;
     initShortestPathNode(&sPathC,&nodeC ,NULL,3,3);
     initShortestPathNode(&sPathA,&nodeA ,NULL,2,2);
     initShortestPathNode(&sPathB,&nodeB ,NULL,1,1);
@@ -339,7 +331,6 @@ void test_getGraphPathFromPathCost_find_0(void){
 *    (0)path0
 **/
 void test_findSmallestPathCostFromAVL(void){
-    GraphPath * graphPathNode;
     initShortestPathNode(&sPathC,&nodeC ,NULL,3,3);
     initShortestPathNode(&sPathA,&nodeA ,NULL,2,2);
     initShortestPathNode(&sPathB,&nodeB ,NULL,1,1);
@@ -358,7 +349,6 @@ void test_findSmallestPathCostFromAVL(void){
 *                                                         (0)
 **/
 void test_deleteGraphPathFromPathCostAVL(void){
-    GraphPath * graphPathNode;
     initShortestPathNode(&sPathC,&nodeC ,NULL,3,3);
     initShortestPathNode(&sPathA,&nodeA ,NULL,2,2);
     initShortestPathNode(&sPathB,&nodeB ,NULL,1,1);
@@ -394,7 +384,6 @@ void test_deleteGraphPathFromPathCostAVL(void){
 *
 **/
 void test_deleteGraphPathFromPathCostAVL_but_not_inside_the_tree(void){
-    GraphPath * graphPathNode;
     initShortestPathNode(&sPathC,&nodeC ,NULL,3,3);
     initShortestPathNode(&sPathA,&nodeA ,NULL,2,2);
     initShortestPathNode(&sPathB,&nodeB ,NULL,1,1);
@@ -415,9 +404,6 @@ void test_deleteGraphPathFromPathCostAVL_but_not_inside_the_tree(void){
 *                                         (2)B
 **/
 void test_deleteGraphPathIntoPathCostAVL_with_same_cost(void){
-    GraphPath * graphPathNode;
-    GraphPath * listGraphPath;
-    ListItem * outListItem;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -457,10 +443,6 @@ void test_deleteGraphPathIntoPathCostAVL_with_same_cost(void){
 *                                         (2)B
 **/
 void test_deleteAndOverrideGraphPathWithSameCost_with_same_cost(void){
-    GraphPath * graphPathNode;
-    GraphPath * listGraphPath;
-    GraphPath * gPath;
-    ListItem * outListItem;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -493,10 +475,6 @@ void test_deleteAndOverrideGraphPathWithSameCost_with_same_cost(void){
 *
 **/
 void test_deleteAndOverrideGraphPathWithSameCost_without_sameCost(void){
-    GraphPath * graphPathNode;
-    GraphPath * listGraphPath;
-    GraphPath * gPath;
-    ListItem * outListItem;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -526,10 +504,6 @@ void test_deleteAndOverrideGraphPathWithSameCost_without_sameCost(void){
 *                                         (2)B
 **/
 void test_deleteSameCostGraphPathListItem_with_same_cost(void){
-    GraphPath * graphPathNode;
-    GraphPath * listGraphPath;
-    GraphPath * gPath;
-    ListItem * outListItem;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -564,10 +538,6 @@ void test_deleteSameCostGraphPathListItem_with_same_cost(void){
 *                                         (2)B
 **/
 void test_deleteSameCostGraphPathListItem_with_same_cost_delete_C(void){
-    GraphPath * graphPathNode;
-    GraphPath * listGraphPath;
-    GraphPath * gPath;
-    ListItem * outListItem;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -601,10 +571,6 @@ void test_deleteSameCostGraphPathListItem_with_same_cost_delete_C(void){
 *
 **/
 void test_deleteSameCostGraphPathListItem_with_same_cost_delete_C_but_nothing_inside_sameCostPathLink(void){
-    GraphPath * graphPathNode;
-    GraphPath * listGraphPath;
-    GraphPath * gPath;
-    ListItem * outListItem;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -618,8 +584,8 @@ void test_deleteSameCostGraphPathListItem_with_same_cost_delete_C_but_nothing_in
         gPath = getGraphPathFromPathCost(2);
         graphPathNode= (GraphPath*)deleteSameCostGraphPathListItem(gPath,"nodeC");
     }Catch(ex) {
-      dumpException(ex);
-      TEST_ASSERT_EQUAL(ERR_NODE_NOT_FOUND, ex->errorCode);
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_NODE_NOT_FOUND, ex->errorCode);
   }
 
 }
@@ -633,7 +599,6 @@ void test_deleteSameCostGraphPathListItem_with_same_cost_delete_C_but_nothing_in
 *
 **/
 void test_resetPathCostAVL(void){
-    GraphPath * graphPathNode;
     initShortestPathNode(&sPathC,&nodeC ,NULL,3,3);
     initShortestPathNode(&sPathA,&nodeA ,NULL,2,2);
     initShortestPathNode(&sPathB,&nodeB ,NULL,1,1);
@@ -651,7 +616,6 @@ void test_resetPathCostAVL(void){
 *
 **/
 void test_addGraphPathIntoPathNameAVL(void){
-    GraphPath * graphPathNode;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -681,7 +645,6 @@ void test_addGraphPathIntoPathNameAVL(void){
 *
 **/
 void test_getGraphPathFromNodeName(void){
-    GraphPath * graphPathNode;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -701,7 +664,6 @@ void test_getGraphPathFromNodeName(void){
 *
 **/
 void test_getGraphPathFromNodeName_findC(void){
-    GraphPath * graphPathNode;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -720,7 +682,6 @@ void test_getGraphPathFromNodeName_findC(void){
 *
 **/
 void test_getGraphPathFromNodeName_findD(void){
-    GraphPath * graphPathNode;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -740,7 +701,6 @@ void test_getGraphPathFromNodeName_findD(void){
 *
 **/
 void test_getGraphPathFromNodeName_findB(void){
-    GraphPath * graphPathNode;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeD ,"nodeD",NULL,0);
@@ -761,7 +721,6 @@ void test_getGraphPathFromNodeName_findB(void){
 *
 **/
 void test_deleteIntoPathNameAVL(void){
-    GraphPath * graphPathNode;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -794,7 +753,6 @@ void test_deleteIntoPathNameAVL(void){
 *
 **/
 void test_deleteIntoPathNameAVL_could_not_found_the_node(void){
-    GraphPath * graphPathNode;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
@@ -818,7 +776,6 @@ void test_deleteIntoPathNameAVL_could_not_found_the_node(void){
 *
 **/
 void test_resetNodeNameAVL(void){
-    GraphPath * graphPathNode;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
