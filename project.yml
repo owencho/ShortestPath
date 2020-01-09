@@ -31,7 +31,7 @@
     - -:test/support
   :source:
     - src/**
-    - ../ShortestPath/LinkList/src/**
+    - ../ShortestPath/LinkedList/src/**
     - ../ShortestPath/AVLTree/src/**
   :support:
     - test/support

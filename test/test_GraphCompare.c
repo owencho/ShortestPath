@@ -5,7 +5,7 @@
 #include "NetworkNode.h"
 #include "List.h"
 #include "Compare.h"
-#include "LinkListCompare.h"
+#include "LinkedListCompare.h"
 
 NetworkNode nodeA , nodeB;
 ShortestPathNode sPathRoot ,sPathNode;
@@ -162,7 +162,7 @@ void test_graphCompareForName_input_same_node(void){
 }
 
 void test_graphCompareForSameCostList_different_name_return_0(void){
-    LinkListCompare compare = (LinkListCompare)graphCompareForSameCostList;
+    LinkedListCompare compare = (LinkedListCompare)graphCompareForSameCostList;
     initNetworkNode(&nodeA,"nodeA",NULL,0);
     initNetworkNode(&nodeB,"nodeB",NULL,0);
     initShortestPathNode(&sPathRoot,&nodeA ,NULL,1,1);
@@ -174,7 +174,7 @@ void test_graphCompareForSameCostList_different_name_return_0(void){
 }
 
 void test_graphCompareForSameCostList_same_name_return_1(void){
-    LinkListCompare compare = (LinkListCompare)graphCompareForSameCostList;
+    LinkedListCompare compare = (LinkedListCompare)graphCompareForSameCostList;
     initNetworkNode(&nodeA,"nodeA",NULL,0);
     initNetworkNode(&nodeB,"nodeB",NULL,0);
     initShortestPathNode(&sPathRoot,&nodeA ,NULL,1,1);

@@ -103,7 +103,7 @@ GraphPath * deleteSameCostGraphPathListItem(GraphPath * gPath,char * name){
         if(strcmp(sameCostGPath->sPath->id->name ,name)==0){
             gPath->listWithSameCost = deleteSelectedListItem(gPath->listWithSameCost
                                                             ,sameCostGPath
-                                                            ,(LinkListCompare)graphCompareForSameCostList);
+                                                            ,(LinkedListCompare)graphCompareForSameCostList);
             break;
         }
         sameCostItem = getNextListItem(gPath->listWithSameCost);

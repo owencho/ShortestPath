@@ -6,7 +6,7 @@
 #include "Node.h"
 #include "NetworkNode.h"
 #include "List.h"
-#include "LinkListCompare.h"
+#include "LinkedListCompare.h"
 ShortestPathNode sPathRoot,sPathNode;
 NetworkNode nodeA,nodeB,nodeC,nodeD;
 ListItem listItem;
@@ -25,7 +25,7 @@ void initShortestPathNode(ShortestPathNode *sPath,NetworkNode * id ,ShortestPath
     sPath->linkCost = linkCost;
 }
 void test_ShortestPathListCompare_input_same_name(void){
-    LinkListCompare compare = (LinkListCompare)shortestPathListCompare;
+    LinkedListCompare compare = (LinkedListCompare)shortestPathListCompare;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initShortestPathNode(&sPathRoot,&nodeA ,NULL,1,1);
     listItem.data = (void*)&sPathRoot;
@@ -33,7 +33,7 @@ void test_ShortestPathListCompare_input_same_name(void){
 }
 
 void test_ShortestPathListCompare_input_different_name(void){
-    LinkListCompare compare = (LinkListCompare)shortestPathListCompare;
+    LinkedListCompare compare = (LinkedListCompare)shortestPathListCompare;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
     initNetworkNode(&nodeB ,"nodeB",NULL,0);
     initShortestPathNode(&sPathRoot,&nodeB ,NULL,1,1);

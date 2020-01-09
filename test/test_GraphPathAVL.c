@@ -63,12 +63,12 @@ void initShortestPathNode(ShortestPathNode *sPath,NetworkNode * id ,ShortestPath
 }
 
 void test_createGraphPath(void){
-    List linkListA;
+    List linkedListA;
     GraphPath * graphPathNode;
     ListItem itemA;
     Link  listItemDataA;
     initLink(&listItemDataA,0,&nodeA ,&nodeA);
-    initList(&linkListA, &itemA ,NULL,1 ,&itemA);
+    initList(&linkedListA, &itemA ,NULL,1 ,&itemA);
     initShortestPathNode(&sPath,&nodeA ,NULL,1,1);
     graphPathNode = createGraphPath(&sPath);
     TEST_ASSERT_NULL(graphPathNode->left);
@@ -516,7 +516,7 @@ void test_deleteSameCostGraphPathListItem_with_same_cost(void){
     graphPathNode=(GraphPath*)addGraphPathIntoPathCostAVL(&sPathC);
     //delete B
     gPath = getGraphPathFromPathCost(2);
-    //this function is used to delete linkListItem on sameCostItem
+    //this function is used to delete LinkedListItem on sameCostItem
     // it will return graphPath node of main sameCost graphPath
     graphPathNode= (GraphPath*)deleteSameCostGraphPathListItem(gPath,"nodeB");
     TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeA,NULL,2,2);
@@ -550,7 +550,7 @@ void test_deleteSameCostGraphPathListItem_with_same_cost_delete_C(void){
     graphPathNode=(GraphPath*)addGraphPathIntoPathCostAVL(&sPathC);
     //delete B
     gPath = getGraphPathFromPathCost(2);
-    //this function is used to delete linkListItem on sameCostItem
+    //this function is used to delete linkedListItem on sameCostItem
     // it will return graphPath node of main sameCost graphPath
     graphPathNode= (GraphPath*)deleteSameCostGraphPathListItem(gPath,"nodeC");
     TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeA,NULL,2,2);

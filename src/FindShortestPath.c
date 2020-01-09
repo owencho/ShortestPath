@@ -8,15 +8,16 @@
 #include "NetworkNode.h"
 #include "List.h"
 #include "ListItem.h"
-#include "ListItem.h"
 #include "GraphPathAVL.h"
 #include "ShortestPathListCompare.h"
+#include "LinkedListCompare.h"
+
 void findShortestPath(NetworkNode * nNode , char * name){
     List * shortestPathList ;
     ListItem * listItem;
     ShortestPathNode * sPath;
     shortestPathList = generateShortestPath(nNode);
-    listItem =findListItem(shortestPathList,name,(LinkListCompare)shortestPathListCompare);
+    listItem =findListItem(shortestPathList,name,(LinkedListCompare)shortestPathListCompare);
     printShortestPathDetails(nNode,listItem->data);
 }
 
@@ -37,36 +38,36 @@ void printShortestPathDetails(NetworkNode * nNode,ShortestPathNode * sPath){
 
 List * generateShortestPath(NetworkNode * nNode){
     GraphPath * gPathNode;
-    List * linkList;
+    List * linkedList;
     resetWorkingAVL();
-    linkList = createList(); //initialize the list for shortestPath
+    linkedList = createList(); //initialize the list for shortestPath
     addGraphPathIntoWorkingAVL(createFirstShortestPath(nNode)); //add source node into working Tree
     gPathNode = findSmallestPathCostFromAVL();   //find the smallestNode (source Node)
     while(gPathNode != NULL){ //find the smallest gPathNode until the root tree is NULL
         deleteGraphPathFromWorkingAVL(gPathNode->sPath); //found and then delete the gPath from both tree
         addNeighbouringNode(gPathNode); //find the NearestNode and Add into working Tree
         gPathNode->sPath->id->marked = 1;  //mark the current pointed networkNode as checked
-        linkList = listAddItemToHead(linkList,(void*)gPathNode->sPath); //after marked then add shortestPath into Spath LinkList
+        linkedList = listAddItemToHead(linkedList,(void*)gPathNode->sPath); //after marked then add shortestPath into Spath LinkedList
         gPathNode = findSmallestPathCostFromAVL(); //find the smallestNode
     }
-    return linkList;
+    return linkedList;
 }
 
 
 
 void addNeighbouringNode(GraphPath* graphPath){
-    List * nearestNodelinkList;
+    List * nearestNodeLinkedList;
     ListItem * listItem;
     Link * linkItemData;
     ShortestPathNode * sPathToAdd;
-    nearestNodelinkList= getIteratorOfLinks(graphPath->sPath->id);   //retreive the link list
-    resetCurrentListItem(nearestNodelinkList);      // reset the linkList
-    listItem = getCurrentListItem(nearestNodelinkList);
+    nearestNodeLinkedList= getIteratorOfLinks(graphPath->sPath->id);   //retreive the link list
+    resetCurrentListItem(nearestNodeLinkedList);      // reset the linkedList
+    listItem = getCurrentListItem(nearestNodeLinkedList);
     while(listItem !=NULL) { //add all listItem until the current points to NULL
         linkItemData = (Link*)listItem->data;    //retreive the data with cost, head , tail
-        sPathToAdd= createShortestPathFromLinkItemData(graphPath->sPath,linkItemData); //create the shortestPath from linkListItemData
+        sPathToAdd= createShortestPathFromLinkItemData(graphPath->sPath,linkItemData); //create the shortestPath from LinkedListItemData
         compareAndAddShortestPathIntoWorkingAVL(sPathToAdd); //compare the previous and new pathCost and add into the working Tree
-        listItem = getNextListItem(nearestNodelinkList);   // get next List Item
+        listItem = getNextListItem(nearestNodeLinkedList);   // get next List Item
     }
 }
 

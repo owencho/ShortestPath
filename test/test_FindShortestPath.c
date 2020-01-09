@@ -38,7 +38,7 @@ NetworkNode nodeA ,nodeB,nodeC,nodeD,nodeE;
 ShortestPathNode * outSPathNode;
 List networkListC,networkListA,networkListB,networkListD,networkListE;
 List shortestPathList;
-List * outLinkList;
+List * outLinkedList;
 ListItem * outListItem;
 GraphPath * listGraphPath;
 GraphPath * graphPathNode;
@@ -341,7 +341,7 @@ void test_addNeighbouringNode_one_of_the_path_is_marked(void){
 *                   2
 **/
 // A is marked
-void test_generateShortestPath_expected_linkList_with_shortestPath(void){
+void test_generateShortestPath_expected_LinkedList_with_shortestPath(void){
     initPartialNetworkMap();
     //init expected ShortestPathNode
     initShortestPathNode(&sPathD,&nodeC ,&sPathC,2,2);
@@ -350,21 +350,21 @@ void test_generateShortestPath_expected_linkList_with_shortestPath(void){
     initShortestPathNode(&sPathB,&nodeB ,&sPathA,3,4);
     Try{
         resetWorkingAVL();
-        outLinkList = generateShortestPath(&nodeC);
+        outLinkedList = generateShortestPath(&nodeC);
 
-        outListItem= getCurrentListItem(outLinkList);
+        outListItem= getCurrentListItem(outLinkedList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeB,&sPathA,4,3);
-        outListItem= getNextListItem(outLinkList);
+        outListItem= getNextListItem(outLinkedList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeD,&sPathC,2,2);
-        outListItem= getNextListItem(outLinkList);
+        outListItem= getNextListItem(outLinkedList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeA,&sPathC,1,1);
-        outListItem= getNextListItem(outLinkList);
+        outListItem= getNextListItem(outLinkedList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeC,NULL,0,0);
-        outListItem= getNextListItem(outLinkList);
+        outListItem= getNextListItem(outLinkedList);
         TEST_ASSERT_NULL(outListItem);
     }Catch(ex) {
         dumpException(ex);
@@ -389,23 +389,23 @@ void test_generateShortestPath_full_networkMap(void){
     initShortestPathNode(&sPathE,&nodeE ,&sPathB,5,1);
     initShortestPathNode(&sPathB,&nodeB ,&sPathA,4,3);
     Try{
-        outLinkList = generateShortestPath(&nodeC);
-        outListItem= getCurrentListItem(outLinkList);
+        outLinkedList = generateShortestPath(&nodeC);
+        outListItem= getCurrentListItem(outLinkedList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeE,&sPathB,5,1);
-        outListItem= getNextListItem(outLinkList);
+        outListItem= getNextListItem(outLinkedList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeB,&sPathA,4,3);
-        outListItem= getNextListItem(outLinkList);
+        outListItem= getNextListItem(outLinkedList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeD,&sPathC,2,2);
-        outListItem= getNextListItem(outLinkList);
+        outListItem= getNextListItem(outLinkedList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeA,&sPathC,1,1);
-        outListItem= getNextListItem(outLinkList);
+        outListItem= getNextListItem(outLinkedList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeC,NULL,0,0);
-        outListItem= getNextListItem(outLinkList);
+        outListItem= getNextListItem(outLinkedList);
         TEST_ASSERT_NULL(outListItem);
     }Catch(ex) {
         dumpException(ex);
