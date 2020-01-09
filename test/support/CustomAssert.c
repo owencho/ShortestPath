@@ -100,13 +100,13 @@ void assertEqualShortestPath(const ShortestPathNode * actualShortestPath,
     }
 
     if(actualShortestPath->pathCost != pathCost){
-        sprintf(msg,"Expected %d but encountered %d in actualShortestPath, the cost on %s is not the same",
+        sprintf(msg,"Expected %d but encountered %d in actualShortestPath, the path cost on %s is not the same",
                 pathCost,actualShortestPath->pathCost,actualShortestPath->id->name);
         UNITY_TEST_FAIL(lineNumber,msg);
     }
 
     if(actualShortestPath->linkCost != linkCost){
-        sprintf(msg,"Expected %d but encountered %d in actualShortestPath, the cost on %s is not the same",
+        sprintf(msg,"Expected %d but encountered %d in actualShortestPath, the link cost on %s is not the same",
                 linkCost,actualShortestPath->linkCost,actualShortestPath->id->name);
         UNITY_TEST_FAIL(lineNumber,msg);
     }

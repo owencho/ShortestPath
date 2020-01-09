@@ -23,18 +23,20 @@
 #include "GraphCompare.h"
 #include "CustomAssert.h"
 
-ShortestPathNode sPathA ,sPathB,sPathC,sPathD;
+ShortestPathNode sPathA ,sPathB,sPathC,sPathD,sPathE;
 Link linkItemDataCD,linkItemDataCA,linkItemDataCB;
 Link linkItemDataAC,linkItemDataAB;
-Link linkItemDataBC,linkItemDataBA;
-Link linkItemDataDC;
+Link linkItemDataBC,linkItemDataBA,linkItemDataBD,linkItemDataBE;
+Link linkItemDataDC,linkItemDataDB,linkItemDataDE;
+Link linkItemDataED,linkItemDataEB;
 ListItem listItemCD,listItemCA,listItemCB;
 ListItem listItemAC,listItemAB;
-ListItem listItemBC,listItemBA;
-ListItem listItemDC;
-NetworkNode nodeA ,nodeB,nodeC,nodeD;
+ListItem listItemBC,listItemBA,listItemBD,listItemBE;
+ListItem listItemDC,listItemDE,listItemDB;
+ListItem listItemEB,listItemED;
+NetworkNode nodeA ,nodeB,nodeC,nodeD,nodeE;
 ShortestPathNode * outSPathNode;
-List networkListC,networkListA,networkListB,networkListD;
+List networkListC,networkListA,networkListB,networkListD,networkListE;
 List shortestPathList;
 List * outLinkList;
 ListItem * outListItem;
@@ -89,8 +91,8 @@ void initListItem(ListItem * listItem ,ListItem * next,void * data){
 **/
 void initPartialNetworkMap(void){
     initLink(&linkItemDataCA,1,&nodeA ,&nodeC);
-    initLink(&linkItemDataCB,2,&nodeB ,&nodeC);
-    initLink(&linkItemDataCD,7,&nodeD,&nodeC);
+    initLink(&linkItemDataCB,7,&nodeB ,&nodeC);
+    initLink(&linkItemDataCD,2,&nodeD,&nodeC);
     initListItem(&listItemCA ,&listItemCD,(void*) &linkItemDataCA);
     initListItem(&listItemCB ,NULL,(void*) &linkItemDataCB);
     initListItem(&listItemCD ,&listItemCB,(void*)&linkItemDataCD);
@@ -117,13 +119,67 @@ void initPartialNetworkMap(void){
     initNetworkNode(&nodeC ,"nodeC",&networkListC,0);
     initNetworkNode(&nodeD ,"nodeD",&networkListD,0);
 }
+
 /**
-*              (3)                               compares with sPathD
-*         (A)----- (B)                   (A)2     with nodeC id        (A)2
-*        1 \     7 /                    /   \   ---------------->     /  |
-*           \    /                    (B)1  (C)3                   (B)1 |
-*            (C)------(D)                                              (C)2
+*              (3)       (1)
+*         (A)----- (B) ----- (E)
+*        1 \     7 / \ 5    /
+*           \    /    \   /  (7)
+*            (C)------(D)
 *                   2
+**/
+void initFullNetworkMap(void){
+    initLink(&linkItemDataCA,1,&nodeA ,&nodeC);
+    initLink(&linkItemDataCB,7,&nodeB ,&nodeC);
+    initLink(&linkItemDataCD,2,&nodeD,&nodeC);
+    initListItem(&listItemCA ,&listItemCD,(void*) &linkItemDataCA);
+    initListItem(&listItemCB ,NULL,(void*) &linkItemDataCB);
+    initListItem(&listItemCD ,&listItemCB,(void*)&linkItemDataCD);
+    initList(&networkListC, &listItemCA ,&listItemCB ,3 ,&listItemCA);
+
+    initLink(&linkItemDataAC,1,&nodeC ,&nodeA);
+    initLink(&linkItemDataAB,3,&nodeB ,&nodeA);
+    initListItem(&listItemAC ,&listItemAB,(void*) &linkItemDataAC);
+    initListItem(&listItemAB ,NULL,(void*) &linkItemDataAB);
+    initList(&networkListA, &listItemAC ,&listItemAB ,2 ,&listItemAC);
+
+    initLink(&linkItemDataBC,7,&nodeC ,&nodeB);
+    initLink(&linkItemDataBA,3,&nodeA,&nodeB);
+    initLink(&linkItemDataBD,5,&nodeD,&nodeB);
+    initLink(&linkItemDataBE,1,&nodeE,&nodeB);
+    initListItem(&listItemBC ,&listItemBD,(void*) &linkItemDataBC);
+    initListItem(&listItemBA ,&listItemBC,(void*) &linkItemDataBA);
+    initListItem(&listItemBD ,&listItemBE,(void*) &linkItemDataBD);
+    initListItem(&listItemBE ,NULL,(void*) &linkItemDataBE);
+    initList(&networkListB, &listItemBA ,&listItemBE ,4 ,&listItemBA);
+
+    initLink(&linkItemDataDC,2,&nodeC ,&nodeD);
+    initLink(&linkItemDataDE,7,&nodeE ,&nodeD);
+    initLink(&linkItemDataDB,5,&nodeB ,&nodeD);
+    initListItem(&listItemDC ,&listItemDB,(void*) &linkItemDataDC);
+    initListItem(&listItemDE ,NULL,(void*) &linkItemDataDE);
+    initListItem(&listItemDB ,&listItemDE,(void*) &linkItemDataDB);
+    initList(&networkListD, &listItemDC ,&listItemDE ,3 ,&listItemDC);
+
+    initLink(&linkItemDataEB,1,&nodeB ,&nodeE);
+    initLink(&linkItemDataED,7,&nodeD ,&nodeE);
+    initListItem(&listItemEB ,&listItemED,(void*) &linkItemDataEB);
+    initListItem(&listItemED ,NULL,(void*) &linkItemDataED);
+    initList(&networkListE, &listItemEB ,&listItemED ,2 ,&listItemEB);
+
+    initNetworkNode(&nodeA ,"nodeA",&networkListA,0);
+    initNetworkNode(&nodeB ,"nodeB",&networkListB,0);
+    initNetworkNode(&nodeC ,"nodeC",&networkListC,0);
+    initNetworkNode(&nodeD ,"nodeD",&networkListD,0);
+    initNetworkNode(&nodeE ,"nodeE",&networkListE,0);
+}
+/**
+*                                    compares with sPathD
+*                            (A)2     with nodeC id        (A)2
+*                           /   \   ---------------->     /  |
+*                         (B)1  (C)3                   (B)1 |
+*                                                         (C)2
+*
 **/
 void test_compareAndAddShortestPathIntoWorkingAVL_smaller_path(void){
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
@@ -131,7 +187,7 @@ void test_compareAndAddShortestPathIntoWorkingAVL_smaller_path(void){
     initNetworkNode(&nodeC ,"nodeC",NULL,0);
     initShortestPathNode(&sPathD,&nodeC ,&sPathB,2,2);
     initShortestPathNode(&sPathC,&nodeC ,&sPathA,3,3);
-    initShortestPathNode(&sPathA,&nodeA ,NULL,1,2);
+    initShortestPathNode(&sPathA,&nodeA ,NULL,2,1);
     initShortestPathNode(&sPathB,&nodeB ,NULL,1,1);
 
     Try{
@@ -140,7 +196,7 @@ void test_compareAndAddShortestPathIntoWorkingAVL_smaller_path(void){
         addGraphPathIntoWorkingAVL(&sPathA);
         addGraphPathIntoWorkingAVL(&sPathB);
         graphPathNode=(GraphPath*)compareAndAddShortestPathIntoWorkingAVL(&sPathD);
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeA,NULL,2,2);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeA,NULL,2,1);
         TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->left->sPath,&nodeB,NULL,1,1);
         TEST_ASSERT_NULL(graphPathNode->right);
 
@@ -155,12 +211,11 @@ void test_compareAndAddShortestPathIntoWorkingAVL_smaller_path(void){
     }
 }
 /**
-*              (3)                               compares with sPathD
-*         (A)----- (B)                   (A)2     with nodeC id        (A)2
-*        1 \     7 /                    /   \   ---------------->     /   \
-*           \    /                    (B)1  (C)3                   (B)1  (C)3
-*            (C)------(D)
-*                   2
+*                                              compares with sPathD
+*                                         (A)2     with nodeC id        (A)2
+*                                        /   \   ---------------->     /   \
+*                                     (B)1  (C)3                   (B)1  (C)3
+*
 **/
 void test_compareAndAddShortestPathIntoWorkingAVL_larger_path(void){
     initNetworkNode(&nodeA ,"nodeA",NULL,0);
@@ -186,8 +241,8 @@ void test_compareAndAddShortestPathIntoWorkingAVL_larger_path(void){
     }
 }
 /**                                              (nodeB) is marked
-*              (3)                               compares with sPathB
-*         (A)----- (B)                   (A)2     with nodeB id        (A)2
+*              (3)
+*         (A)----- (B)                   (A)2     add nodeB            (A)2
 *        1 \     7 /                        \   ---------------->        \
 *           \    /                          (C)3                        (C)3
 *            (C)------(D)
@@ -226,6 +281,7 @@ void test_findAndAddNearestNode_initial(void){
     initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
     initGraphPath(&gPath,NULL,NULL,0,&sPathC);
     Try{
+        TEST_IGNORE_MESSAGE("this need to be tested");
         resetWorkingAVL();
         findAndAddNearestNode(&gPath);
       //  TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeB,NULL,1,1);
@@ -252,6 +308,7 @@ void test_findAndAddNearestNode_one_of_the_path_is_marked(void){
     initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
     initGraphPath(&gPath,NULL,NULL,0,&sPathC);
     Try{
+        TEST_IGNORE_MESSAGE("this need to be tested");
         resetWorkingAVL();
         findAndAddNearestNode(&gPath);
       //  TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeB,NULL,1,1);
@@ -272,8 +329,13 @@ void test_findAndAddNearestNode_one_of_the_path_is_marked(void){
 *                   2
 **/
 // A is marked
-void test_generateShortestPath_expected_linkList_with_graphPath(void){
+void test_generateShortestPath_expected_linkList_with_shortestPath(void){
     initPartialNetworkMap();
+    //init expected ShortestPathNode
+    initShortestPathNode(&sPathD,&nodeC ,&sPathC,2,2);
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
+    initShortestPathNode(&sPathB,&nodeB ,&sPathA,3,4);
     Try{
         resetWorkingAVL();
         outLinkList = generateShortestPath(&nodeC);
@@ -292,7 +354,6 @@ void test_generateShortestPath_expected_linkList_with_graphPath(void){
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeC,NULL,0,0);
         outListItem= getNextListItem(outLinkList);
-        outSPathNode = outListItem->data;
         TEST_ASSERT_NULL(outListItem);
     }Catch(ex) {
         dumpException(ex);
@@ -301,22 +362,28 @@ void test_generateShortestPath_expected_linkList_with_graphPath(void){
 }
 
 /**
-*              (3)
-*         (A)----- (B)
-*        1 \     7 /
-*           \    /
+*              (3)       (1)
+*         (A)----- (B) ----- (E)
+*        1 \     7 / \ 5    /
+*           \    /    \   /  (7)
 *            (C)------(D)
 *                   2
 **/
-// A is marked
 void test_generateShortestPath_full_networkMap(void){
-    initPartialNetworkMap();
+    initFullNetworkMap();
+    //init expected ShortestPathNode
+    initShortestPathNode(&sPathD,&nodeC ,&sPathC,2,2);
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
+    initShortestPathNode(&sPathE,&nodeE ,&sPathB,5,1);
+    initShortestPathNode(&sPathB,&nodeB ,&sPathA,4,3);
     Try{
-        resetWorkingAVL();
         outLinkList = generateShortestPath(&nodeC);
-        resetWorkingAVL();
 
         outListItem= getCurrentListItem(outLinkList);
+        outSPathNode = outListItem->data;
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeE,&sPathB,5,1);
+        outListItem= getNextListItem(outLinkList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeB,&sPathA,4,3);
         outListItem= getNextListItem(outLinkList);
@@ -329,8 +396,31 @@ void test_generateShortestPath_full_networkMap(void){
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeC,NULL,0,0);
         outListItem= getNextListItem(outLinkList);
-        outSPathNode = outListItem->data;
         TEST_ASSERT_NULL(outListItem);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
+/**
+*              (3)       (1)
+*         (A)----- (B) ----- (E)
+*        1 \     7 / \ 5    /
+*           \    /    \   /  (7)
+*            (C)------(D)
+*                   2
+**/
+void test_findShortestPath_full_networkMap(void){
+    initFullNetworkMap();
+    //init expected ShortestPathNode
+    initShortestPathNode(&sPathD,&nodeC ,&sPathC,2,2);
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
+    initShortestPathNode(&sPathE,&nodeE ,&sPathB,5,1);
+    initShortestPathNode(&sPathB,&nodeB ,&sPathA,4,3);
+    Try{
+        outLinkList = findShortestPath(&nodeC,"nodeC");
     }Catch(ex) {
         dumpException(ex);
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");

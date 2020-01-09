@@ -45,7 +45,6 @@ void resetWorkingAVL(void){
 void * addGraphPathIntoPathCostAVL(ShortestPathNode * sPath){
     GraphPath * gNode;
     GraphPath * newGPath;
-    ListItem * newListItem = (ListItem *)malloc(sizeof(ListItem));
     if(rootTreePathCost == NULL){
         rootTreePathCost = createGraphPath(sPath);
     }
@@ -57,8 +56,7 @@ void * addGraphPathIntoPathCostAVL(ShortestPathNode * sPath){
                                (Compare)graphCompareForPathCostAvlAdd);
         }Catch(ex){
             gNode= getGraphPathFromPathCost(sPath->pathCost);
-            newListItem->data = (void*)newGPath;
-            gNode->listWithSameCost = listAddItemToHead(gNode->listWithSameCost,newListItem);
+            gNode->listWithSameCost = listAddItemToHead(gNode->listWithSameCost,(void*)newGPath);
             resetCurrentListItem(gNode->listWithSameCost);
         }
     }
@@ -123,6 +121,8 @@ GraphPath * getGraphPathFromPathCost(int pathCost){
 
 GraphPath * findSmallestPathCostFromAVL(void){
     GraphPath * smallestNode ;
+    if(rootTreePathCost == NULL)
+        return NULL;
     smallestNode = (GraphPath*)findSmallestNode((Node*)rootTreePathCost);
     if(smallestNode->listWithSameCost->count != 0){
         smallestNode = smallestNode->listWithSameCost->head->data;
