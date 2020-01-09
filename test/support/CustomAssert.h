@@ -19,12 +19,6 @@ void assertEqualLink(const Link * actualLinkItemData,
                      const int cost,
                      const UNITY_LINE_TYPE lineNumber);
 
-void assertEqualGraphPath(const GraphPath * actualGraphPath,
-                         const GraphPath * left,
-                         const GraphPath * right,
-                         const int bFactor,
-                         const ShortestPathNode * sPath,
-                         const UNITY_LINE_TYPE lineNumber);
 
 void testReportFailure (const UNITY_LINE_TYPE lineNumber,char* message ,...);
 
@@ -34,6 +28,4 @@ void testReportFailure (const UNITY_LINE_TYPE lineNumber,char* message ,...);
 #define TEST_ASSERT_EQUAL_SHORTEST_PATH(actualGraphPath,id,parent,pathCost,linkCost)        \
                       assertEqualShortestPath(actualGraphPath,id,parent,pathCost,linkCost,__LINE__)
 
-#define TEST_ASSERT_EQUAL_GRAPH_PATH(actualGraphPath,left,right,bFactor,sPath)        \
-                      assertEqualGraphPath(actualGraphPath,left,right,bFactor,sPath,__LINE__)
 #endif // _CUSTOMASSERT_H

@@ -6,61 +6,6 @@
 #include <malloc.h>
 #include <stdarg.h>
 #include <string.h>
-/*
-void assertEqualGraphPath(const GraphPath * actualGraphPath,
-                          const GraphPath * left,
-                          const GraphPath * right,
-                          const int bFactor,
-                          const ShortestPathNode * sPath,
-                          const UNITY_LINE_TYPE lineNumber){
-
-    char msg[1024];
-    int length;
-    int i;
-
-    if(actualGraphPath == NULL){
-        UNITY_TEST_FAIL(lineNumber,"The actual GraphPath is NULL");
-    }
-    if(actualGraphPath->left != left){
-        if(left == NULL){
-            sprintf(msg,"the actual left GraphPath is %s and not NULL"
-                    ,actualGraphPath->left->sPath->id->name,actualGraphPath->left->sPath->src->name);
-        }
-        else if (actualGraphPath->left == NULL){
-            sprintf(msg,"the actual left GraphPath is NULL and not (id=%s,src=%s) "
-                    ,left->sPath->id->name,left->sPath->src->name);
-        }
-        else{
-            sprintf(msg,"Expected (id=%s,src=%s)  but encountered (id=%s,src=%s) in actualGraphPath , the left GraphPath is not the same"
-                    ,left->sPath->id->name,left->sPath->src->name,actualGraphPath->left->sPath->id->name,actualGraphPath->left->sPath->src->name);
-        }
-        UNITY_TEST_FAIL(lineNumber,msg);
-    }
-
-    if(actualGraphPath->right != right){
-        if(right == NULL){
-            sprintf(msg,"the actual right GraphPath is (id=%s,src=%s) and not NULL"
-                    ,actualGraphPath->right->sPath->id->name,actualGraphPath->right->sPath->src->name);
-        }
-        else if (actualGraphPath->right == NULL){
-            sprintf(msg,"the actual right GraphPath is NULL and not (id=%s,src=%s) "
-                        ,right->sPath->id->name,right->sPath->src->name);
-        }
-        else{
-            sprintf(msg,"Expected (id=%s,src=%s)  but encountered (id=%s,src=%s) in actualGraphPath , the right GraphPath is not the same"
-                    ,right->sPath->id->name,right->sPath->src->name,actualGraphPath->right->sPath->id->name,actualGraphPath->right->sPath->src->name);
-        }
-        UNITY_TEST_FAIL(lineNumber,msg);
-    }
-
-    if(actualGraphPath->bFactor != bFactor){
-        sprintf(msg,"Expected %d but encountered %d in actualGraphPath, the balanceFactor on graphPath (id=%s,src=%s)  is not the same"
-                ,bFactor,actualGraphPath->bFactor,actualGraphPath->sPath->id->name,actualGraphPath->sPath->src->name);
-        UNITY_TEST_FAIL(lineNumber,msg);
-    }
-    assertEqualShortestPath(actualGraphPath->sPath,sPath->id,sPath->src,sPath->pathCost,sPath->pathLinks,lineNumber);
-}
-*/
 void assertEqualShortestPath(const ShortestPathNode * actualShortestPath,
                              const NetworkNode * id,
                              const ShortestPathNode * parent,
@@ -110,8 +55,9 @@ void assertEqualShortestPath(const ShortestPathNode * actualShortestPath,
                 linkCost,actualShortestPath->linkCost,actualShortestPath->id->name);
         UNITY_TEST_FAIL(lineNumber,msg);
     }
-
 }
+
+
 
 void assertEqualLink(const Link * actualLinkItemData,
                      const NetworkNode * head,

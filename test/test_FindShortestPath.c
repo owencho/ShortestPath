@@ -22,7 +22,7 @@
 #include "GraphPathAVL.h"
 #include "GraphCompare.h"
 #include "CustomAssert.h"
-
+#include "ShortestPathListCompare.h"
 ShortestPathNode sPathA ,sPathB,sPathC,sPathD,sPathE;
 Link linkItemDataCD,linkItemDataCA,linkItemDataCB;
 Link linkItemDataAC,linkItemDataAB;
@@ -42,7 +42,9 @@ List * outLinkList;
 ListItem * outListItem;
 GraphPath * listGraphPath;
 GraphPath * graphPathNode;
-GraphPath gPath;
+GraphPath gPath,gPathA;
+
+extern GraphPath * rootTreePathCost;
 CEXCEPTION_T ex;
 void setUp(void){}
 void tearDown(void){}
@@ -173,6 +175,7 @@ void initFullNetworkMap(void){
     initNetworkNode(&nodeD ,"nodeD",&networkListD,0);
     initNetworkNode(&nodeE ,"nodeE",&networkListE,0);
 }
+
 /**
 *                                    compares with sPathD
 *                            (A)2     with nodeC id        (A)2
@@ -195,15 +198,15 @@ void test_compareAndAddShortestPathIntoWorkingAVL_smaller_path(void){
         addGraphPathIntoWorkingAVL(&sPathC);
         addGraphPathIntoWorkingAVL(&sPathA);
         addGraphPathIntoWorkingAVL(&sPathB);
-        graphPathNode=(GraphPath*)compareAndAddShortestPathIntoWorkingAVL(&sPathD);
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeA,NULL,2,1);
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->left->sPath,&nodeB,NULL,1,1);
-        TEST_ASSERT_NULL(graphPathNode->right);
+        compareAndAddShortestPathIntoWorkingAVL(&sPathD);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeA,NULL,2,1);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->left->sPath,&nodeB,NULL,1,1);
+        TEST_ASSERT_NULL(rootTreePathCost->right);
 
-        outListItem= getCurrentListItem(graphPathNode->listWithSameCost);
+        outListItem= getCurrentListItem(rootTreePathCost->listWithSameCost);
         listGraphPath = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(listGraphPath->sPath,&nodeC,&sPathB,2,2);
-        outListItem= getNextListItem(graphPathNode->listWithSameCost);
+        outListItem= getNextListItem(rootTreePathCost->listWithSameCost);
         TEST_ASSERT_NULL(outListItem);
     }Catch(ex) {
         dumpException(ex);
@@ -211,10 +214,10 @@ void test_compareAndAddShortestPathIntoWorkingAVL_smaller_path(void){
     }
 }
 /**
-*                                              compares with sPathD
-*                                         (A)2     with nodeC id        (A)2
-*                                        /   \   ---------------->     /   \
-*                                     (B)1  (C)3                   (B)1  (C)3
+*           compares with sPathD
+*    (A)2     with nodeC id        (A)2
+*   /   \   ---------------->     /   \
+* (B)1  (C)3                   (B)1  (C)3
 *
 **/
 void test_compareAndAddShortestPathIntoWorkingAVL_larger_path(void){
@@ -231,10 +234,10 @@ void test_compareAndAddShortestPathIntoWorkingAVL_larger_path(void){
         addGraphPathIntoWorkingAVL(&sPathC);
         addGraphPathIntoWorkingAVL(&sPathA);
         addGraphPathIntoWorkingAVL(&sPathB);
-        graphPathNode=(GraphPath*)compareAndAddShortestPathIntoWorkingAVL(&sPathD);
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeC,NULL,3,3);
-        TEST_ASSERT_NULL(graphPathNode->left);
-        TEST_ASSERT_NULL(graphPathNode->right);
+        compareAndAddShortestPathIntoWorkingAVL(&sPathD);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeA,NULL,2,2);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->left->sPath,&nodeB,NULL,1,1);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeC,NULL,3,3);
     }Catch(ex) {
         dumpException(ex);
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
@@ -260,8 +263,10 @@ void test_compareAndAddShortestPathIntoWorkingAVL_with_marked_node(void){
         resetWorkingAVL();
         addGraphPathIntoWorkingAVL(&sPathA);
         addGraphPathIntoWorkingAVL(&sPathC);
-        graphPathNode=(GraphPath*)compareAndAddShortestPathIntoWorkingAVL(&sPathB);
-        TEST_ASSERT_NULL(graphPathNode);
+        compareAndAddShortestPathIntoWorkingAVL(&sPathB);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeA,NULL,2,2);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeC,NULL,3,3);
+        TEST_ASSERT_NULL(rootTreePathCost->left);
     }Catch(ex) {
         dumpException(ex);
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
@@ -270,23 +275,31 @@ void test_compareAndAddShortestPathIntoWorkingAVL_with_marked_node(void){
 
 /**
 *              (3)
-*         (A)----- (B)                         (D)2
-*        1 \     7 /        -------->         /   \
-*           \    /                          (A)1  (B)7
+*         (A)----- (B)                         (D)2         (D)2
+*        1 \     7 /        -------->         /   \    -->     \
+*           \    /                          (A)1  (B)7         (B)7
 *            (C)------(D)
 *                   2
 **/
-void test_findAndAddNearestNode_initial(void){
+void test_addNeighbouringNode(void){
     initPartialNetworkMap();
     initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
     initGraphPath(&gPath,NULL,NULL,0,&sPathC);
+    initGraphPath(&gPathA,NULL,NULL,0,&sPathA);
     Try{
-        TEST_IGNORE_MESSAGE("this need to be tested");
         resetWorkingAVL();
-        findAndAddNearestNode(&gPath);
-      //  TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeB,NULL,1,1);
-        //TEST_ASSERT_NULL(graphPathNode->left);
-      //  TEST_ASSERT_NULL(graphPathNode->right);
+        addNeighbouringNode(&gPath); //nearestNode from source C
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeD,&sPathC,2,2);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeB,&sPathC,7,7);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->left->sPath,&nodeA,&sPathC,1,1);
+        //mark C
+        gPath.sPath->id->marked = 1;
+        deleteGraphPathFromWorkingAVL(&sPathA);
+        addNeighbouringNode(&gPathA); //nearestNode from source A
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeD,&sPathC,2,2);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeB,&sPathA,4,3);
+        TEST_ASSERT_NULL(rootTreePathCost->left);
     }Catch(ex) {
         dumpException(ex);
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
@@ -302,18 +315,17 @@ void test_findAndAddNearestNode_initial(void){
 *                   2
 **/
 // A is marked
-void test_findAndAddNearestNode_one_of_the_path_is_marked(void){
+void test_addNeighbouringNode_one_of_the_path_is_marked(void){
     initPartialNetworkMap();
     initNetworkNode(&nodeA ,"nodeA",&networkListA,1); //nodeA is marked
     initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
     initGraphPath(&gPath,NULL,NULL,0,&sPathC);
     Try{
-        TEST_IGNORE_MESSAGE("this need to be tested");
         resetWorkingAVL();
-        findAndAddNearestNode(&gPath);
-      //  TEST_ASSERT_EQUAL_SHORTEST_PATH(graphPathNode->sPath,&nodeB,NULL,1,1);
-        //TEST_ASSERT_NULL(graphPathNode->left);
-      //  TEST_ASSERT_NULL(graphPathNode->right);
+        addNeighbouringNode(&gPath);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeD,&sPathC,2,2);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeB,&sPathC,7,7);
+        TEST_ASSERT_NULL(rootTreePathCost->left);
     }Catch(ex) {
         dumpException(ex);
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
@@ -339,7 +351,6 @@ void test_generateShortestPath_expected_linkList_with_shortestPath(void){
     Try{
         resetWorkingAVL();
         outLinkList = generateShortestPath(&nodeC);
-        resetWorkingAVL();
 
         outListItem= getCurrentListItem(outLinkList);
         outSPathNode = outListItem->data;
@@ -379,7 +390,6 @@ void test_generateShortestPath_full_networkMap(void){
     initShortestPathNode(&sPathB,&nodeB ,&sPathA,4,3);
     Try{
         outLinkList = generateShortestPath(&nodeC);
-
         outListItem= getCurrentListItem(outLinkList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeE,&sPathB,5,1);
@@ -411,18 +421,38 @@ void test_generateShortestPath_full_networkMap(void){
 *            (C)------(D)
 *                   2
 **/
-void test_findShortestPath_full_networkMap(void){
-    initFullNetworkMap();
+void test_printShortestPathDetails(void){
     //init expected ShortestPathNode
     initShortestPathNode(&sPathD,&nodeC ,&sPathC,2,2);
     initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
     initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
     initShortestPathNode(&sPathE,&nodeE ,&sPathB,5,1);
     initShortestPathNode(&sPathB,&nodeB ,&sPathA,4,3);
-    Try{
-        outLinkList = findShortestPath(&nodeC,"nodeC");
-    }Catch(ex) {
-        dumpException(ex);
-        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
-    }
+
+    printShortestPathDetails(&nodeC,&sPathE);
+}
+
+/**
+*              (3)       (1)
+*         (A)----- (B) ----- (E)
+*        1 \     7 / \ 5    /
+*           \    /    \   /  (7)
+*            (C)------(D)
+*                   2
+**/
+void test_findShortestPath(void){
+    initFullNetworkMap();
+    findShortestPath(&nodeC,"nodeB");
+}
+/**
+*              (3)       (1)
+*         (A)----- (B) ----- (E)
+*        1 \     7 / \ 5    /
+*           \    /    \   /  (7)
+*            (C)------(D)
+*                   2
+**/
+void test_findShortestPath_differentSource(void){
+    initFullNetworkMap();
+    findShortestPath(&nodeE,"nodeC");
 }

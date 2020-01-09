@@ -11,7 +11,7 @@
 #include "CException.h"
 
 GraphPath * rootTreePathCost = NULL;
-GraphPath * rootTreeNodeName = NULL; //to store gPath but sorted by destination of that gPath
+GraphPath * rootTreeNodeName = NULL;
 CEXCEPTION_T ex;
 
 GraphPath *createGraphPath(ShortestPathNode * sPath){
@@ -101,7 +101,9 @@ GraphPath * deleteSameCostGraphPathListItem(GraphPath * gPath,char * name){
     while(sameCostItem != NULL){
         sameCostGPath = (GraphPath*)sameCostItem->data;
         if(strcmp(sameCostGPath->sPath->id->name ,name)==0){
-            gPath->listWithSameCost = deleteSelectedListItem(gPath->listWithSameCost,sameCostGPath,(LinkListCompare)graphCompareForSameCostList);
+            gPath->listWithSameCost = deleteSelectedListItem(gPath->listWithSameCost
+                                                            ,sameCostGPath
+                                                            ,(LinkListCompare)graphCompareForSameCostList);
             break;
         }
         sameCostItem = getNextListItem(gPath->listWithSameCost);

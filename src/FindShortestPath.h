@@ -4,7 +4,8 @@
 #include "Node.h"
 #include "GraphCompare.h"
 List * generateShortestPath(NetworkNode * nNode);
-void* compareAndAddShortestPathIntoWorkingAVL(ShortestPathNode * sPathToAdd);
-void * findAndAddNearestNode(GraphPath* graphPath);
-
+void compareAndAddShortestPathIntoWorkingAVL(ShortestPathNode * sPathToAdd);
+void addNeighbouringNode(GraphPath* graphPath);
+void findShortestPath(NetworkNode * nNode , char * name);
+void printShortestPathDetails(NetworkNode *nNode,ShortestPathNode * sPath);
 #endif // _FINDSHORTESTPATH_H
