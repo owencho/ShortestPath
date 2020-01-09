@@ -180,14 +180,12 @@ GraphPath * _getGraphPath(void * valuePtr,GraphPath * root,Compare compare){
         return root;
     }
     else if(size == -1){
-        if(root->right != NULL){
+        if(root->right != NULL)
             foundNode = _getGraphPath(valuePtr,root->right,compare);
-        }
     }
     else{
-        if(root->left != NULL){
+        if(root->left != NULL)
             foundNode = _getGraphPath(valuePtr,root->left,compare);
-        }
     }
     return foundNode;
 }
