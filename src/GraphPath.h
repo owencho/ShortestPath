@@ -13,4 +13,7 @@ struct GraphPath{
     List * listWithSameCost ;
     ShortestPathNode * sPath ;
 };
+
+#define freeGraphPath(graphPath)                                      \
+                          do{if(graphPath) free(graphPath);}while(0)
 #endif // _GRAPHPATH_H

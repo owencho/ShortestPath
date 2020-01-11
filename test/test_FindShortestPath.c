@@ -213,6 +213,7 @@ void test_compareAndAddShortestPathIntoWorkingAVL_smaller_path(void){
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
     }
 }
+
 /**
 *           compares with sPathD
 *    (A)2     with nodeC id        (A)2
@@ -235,6 +236,30 @@ void test_compareAndAddShortestPathIntoWorkingAVL_larger_path(void){
         addGraphPathIntoWorkingAVL(&sPathA);
         addGraphPathIntoWorkingAVL(&sPathB);
         compareAndAddShortestPathIntoWorkingAVL(&sPathD);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeA,NULL,2,2);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->left->sPath,&nodeB,NULL,1,1);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeC,NULL,3,3);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+//remain same as input is NULL couldnt compare anything
+void test_compareAndAddShortestPathIntoWorkingAVL_input_NULL(void){
+    initNetworkNode(&nodeA ,"nodeA",NULL,0);
+    initNetworkNode(&nodeB ,"nodeB",NULL,0);
+    initNetworkNode(&nodeC ,"nodeC",NULL,0);
+    initShortestPathNode(&sPathD,&nodeC ,NULL,4,4);
+    initShortestPathNode(&sPathC,&nodeC ,NULL,3,3);
+    initShortestPathNode(&sPathA,&nodeA ,NULL,2,2);
+    initShortestPathNode(&sPathB,&nodeB ,NULL,1,1);
+
+    Try{
+        resetWorkingAVL();
+        addGraphPathIntoWorkingAVL(&sPathC);
+        addGraphPathIntoWorkingAVL(&sPathA);
+        addGraphPathIntoWorkingAVL(&sPathB);
+        compareAndAddShortestPathIntoWorkingAVL(NULL);
         TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeA,NULL,2,2);
         TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->left->sPath,&nodeB,NULL,1,1);
         TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeC,NULL,3,3);
@@ -332,6 +357,21 @@ void test_addNeighbouringNode_one_of_the_path_is_marked(void){
     }
 }
 
+void test_addNeighbouringNode_NULL_input(void){
+    initPartialNetworkMap();
+    initNetworkNode(&nodeA ,"nodeA",&networkListA,1); //nodeA is marked
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initGraphPath(&gPath,NULL,NULL,0,&sPathC);
+    Try{
+        resetWorkingAVL();
+        addNeighbouringNode(NULL);
+        TEST_ASSERT_NULL(rootTreePathCost);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
 /**
 *              (3)
 *         (A)----- (B)
@@ -351,7 +391,6 @@ void test_generateShortestPath_expected_LinkedList_with_shortestPath(void){
     Try{
         resetWorkingAVL();
         outLinkedList = generateShortestPath(&nodeC);
-
         outListItem= getCurrentListItem(outLinkedList);
         outSPathNode = outListItem->data;
         TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeB,&sPathA,4,3);
@@ -412,7 +451,16 @@ void test_generateShortestPath_full_networkMap(void){
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
     }
 }
-
+void test_generateShortestPath_network_node_NULL(void){
+    initFullNetworkMap();
+    Try{
+        outLinkedList = generateShortestPath(NULL);
+        TEST_FAIL_MESSAGE("expecting exception to be thrown");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_NODE_NOT_FOUND,ex->errorCode);
+    }
+}
 /**
 *              (3)       (1)
 *         (A)----- (B) ----- (E)
@@ -428,9 +476,46 @@ void test_printShortestPathDetails(void){
     initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
     initShortestPathNode(&sPathE,&nodeE ,&sPathB,5,1);
     initShortestPathNode(&sPathB,&nodeB ,&sPathA,4,3);
-
-    printShortestPathDetails(&nodeC,&sPathE);
+    Try{
+        printShortestPathDetails(&nodeC,&sPathE);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
 }
+
+void test_printShortestPathDetails_networkNode_NULL(void){
+    //init expected ShortestPathNode
+    initShortestPathNode(&sPathD,&nodeC ,&sPathC,2,2);
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
+    initShortestPathNode(&sPathE,&nodeE ,&sPathB,5,1);
+    initShortestPathNode(&sPathB,&nodeB ,&sPathA,4,3);
+    Try{
+        printShortestPathDetails(NULL,&sPathE);
+        TEST_FAIL_MESSAGE("expecting exception to be thrown");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_NODE_NULL,ex->errorCode);
+    }
+}
+
+void test_printShortestPathDetails_Spath_NULL(void){
+    //init expected ShortestPathNode
+    initShortestPathNode(&sPathD,&nodeC ,&sPathC,2,2);
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
+    initShortestPathNode(&sPathE,&nodeE ,&sPathB,5,1);
+    initShortestPathNode(&sPathB,&nodeB ,&sPathA,4,3);
+    Try{
+        printShortestPathDetails(&nodeC,NULL);
+        TEST_FAIL_MESSAGE("expecting exception to be thrown");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_SPATH_NULL,ex->errorCode);
+    }
+}
+
 
 /**
 *              (3)       (1)
@@ -442,7 +527,13 @@ void test_printShortestPathDetails(void){
 **/
 void test_findShortestPath(void){
     initFullNetworkMap();
-    findShortestPath(&nodeC,"nodeB");
+    Try{
+        findShortestPath(&nodeC,"nodeB");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+
 }
 /**
 *              (3)       (1)
@@ -454,5 +545,32 @@ void test_findShortestPath(void){
 **/
 void test_findShortestPath_differentSource(void){
     initFullNetworkMap();
-    findShortestPath(&nodeE,"nodeC");
+    Try{
+        findShortestPath(&nodeE,"nodeC");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
+void test_findShortestPath_network_node_NULL(void){
+    initFullNetworkMap();
+    Try{
+        findShortestPath(NULL,"nodeC");
+        TEST_FAIL_MESSAGE("expecting exception to be thrown");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_NODE_NOT_FOUND,ex->errorCode);
+    }
+}
+
+void test_findShortestPath_dst_name_NULL(void){
+    initFullNetworkMap();
+    Try{
+        findShortestPath(&nodeE,NULL);
+        TEST_FAIL_MESSAGE("expecting exception to be thrown");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_LIST_NULL,ex->errorCode);
+    }
 }

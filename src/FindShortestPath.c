@@ -11,6 +11,8 @@
 #include "GraphPathAVL.h"
 #include "ShortestPathListCompare.h"
 #include "LinkedListCompare.h"
+#include "Exception.h"
+#include "Error.h"
 
 void findShortestPath(NetworkNode * nNode , char * name){
     List * shortestPathList ;
@@ -18,12 +20,21 @@ void findShortestPath(NetworkNode * nNode , char * name){
     ShortestPathNode * sPath;
     shortestPathList = generateShortestPath(nNode);
     listItem =findListItem(shortestPathList,name,(LinkedListCompare)shortestPathListCompare);
+    if(listItem == NULL){
+        throwException(ERR_LIST_NULL,"couldnt find and locate the node in ShortestPath");
+    }
     printShortestPathDetails(nNode,listItem->data);
 }
 
 void printShortestPathDetails(NetworkNode * nNode,ShortestPathNode * sPath){
     ShortestPathNode * currentPath = sPath;
-    printf("============================== \n");
+    if(nNode == NULL){
+        throwException(ERR_NODE_NULL,"couldnt print as input networkNode is NULL");
+    }
+    else if (sPath == NULL){
+        throwException(ERR_SPATH_NULL,"couldnt print as input shortestPath is NULL");
+    }
+    printf("================================= \n");
     printf("ShortestPath from source %s to %s \n" ,nNode->name,sPath->id->name);
     printf("Total Path cost is %d \n",sPath->pathCost);
     printf("%s ",currentPath->id->name);
@@ -33,22 +44,25 @@ void printShortestPathDetails(NetworkNode * nNode,ShortestPathNode * sPath){
         printf("%s ",currentPath->id->name);
         currentPath = currentPath->parent;
     }
-    printf(" \n============================== \n");
+    printf(" \n================================= \n");
 }
 
 List * generateShortestPath(NetworkNode * nNode){
     GraphPath * gPathNode;
     List * linkedList;
+    if(nNode == NULL){
+        throwException(ERR_NODE_NOT_FOUND," source node is NULL and couldnt generate ShortestPath ");
+    }
     resetWorkingAVL();
     linkedList = createList(); //initialize the list for shortestPath
     addGraphPathIntoWorkingAVL(createFirstShortestPath(nNode)); //add source node into working Tree
     gPathNode = findSmallestPathCostFromAVL();   //find the smallestNode (source Node)
     while(gPathNode != NULL){ //find the smallest gPathNode until the root tree is NULL
-        deleteGraphPathFromWorkingAVL(gPathNode->sPath); //found and then delete the gPath from both tree
-        addNeighbouringNode(gPathNode); //find the NearestNode and Add into working Tree
-        gPathNode->sPath->id->marked = 1;  //mark the current pointed networkNode as checked
-        linkedList = listAddItemToHead(linkedList,(void*)gPathNode->sPath); //after marked then add shortestPath into Spath LinkedList
-        gPathNode = findSmallestPathCostFromAVL(); //find the smallestNode
+      addNeighbouringNode(gPathNode); //find the NearestNode and Add into working Tree
+      gPathNode->sPath->id->marked = 1;  //mark the current pointed networkNode as checked
+      linkedList = listAddItemToHead(linkedList,(void*)gPathNode->sPath); //after marked then add shortestPath into Spath LinkedList
+      deleteGraphPathFromWorkingAVL(gPathNode->sPath); //delete the gPath from both tree
+      gPathNode = findSmallestPathCostFromAVL(); //find the smallestNode
     }
     return linkedList;
 }
@@ -60,6 +74,8 @@ void addNeighbouringNode(GraphPath* graphPath){
     ListItem * listItem;
     Link * linkItemData;
     ShortestPathNode * sPathToAdd;
+    if(graphPath == NULL)
+        return ;
     nearestNodeLinkedList= getIteratorOfLinks(graphPath->sPath->id);   //retreive the link list
     resetCurrentListItem(nearestNodeLinkedList);      // reset the linkedList
     listItem = getCurrentListItem(nearestNodeLinkedList);
@@ -75,6 +91,8 @@ void compareAndAddShortestPathIntoWorkingAVL(ShortestPathNode * sPathToAdd){
     GraphPath * gPath;
     GraphPath * rootTree;
     int pathCostCompare;
+    if(sPathToAdd == NULL)
+        return;
     if(sPathToAdd->id->marked ==0 ){       //if the networkNode is not marked
         gPath = getGraphPathFromNodeName(sPathToAdd->id->name); //find and check is the node exist inside tree
         if(gPath != NULL){ //if the node exist inside tree
