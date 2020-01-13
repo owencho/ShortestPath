@@ -173,11 +173,11 @@ void test_graphCompareForName_input_same_node(void){
     inNode = &inputNode;
     TEST_ASSERT_EQUAL(0,(compare((Node*)&root,(void *)inNode->sPath->id->name)));
 }
-//////////////graphCompareForSameCostList/////////////////////////////////////////////////////
+//////////////listCompareForListWithSameCostGraph/////////////////////////////////////////////////////
 //graphCompareForName is function to compare graphPath inside sameCostList
 // by comparing listItem and the input Node
-void test_graphCompareForSameCostList_different_name_return_0(void){
-    LinkedListCompare compare = (LinkedListCompare)graphCompareForSameCostList;
+void test_listCompareForListWithSameCostGraph_different_name_return_0(void){
+    LinkedListCompare compare = (LinkedListCompare)listCompareForListWithSameCostGraph;
     initNetworkNode(&nodeA,"nodeA",NULL,0);
     initNetworkNode(&nodeB,"nodeB",NULL,0);
     initShortestPathNode(&sPathRoot,&nodeA ,NULL,1,1);
@@ -188,8 +188,8 @@ void test_graphCompareForSameCostList_different_name_return_0(void){
     TEST_ASSERT_EQUAL(0,(compare(&listItem,(void *)&root)));
 }
 
-void test_graphCompareForSameCostList_same_name_return_1(void){
-    LinkedListCompare compare = (LinkedListCompare)graphCompareForSameCostList;
+void test_listCompareForListWithSameCostGraph_same_name_return_1(void){
+    LinkedListCompare compare = (LinkedListCompare)listCompareForListWithSameCostGraph;
     initNetworkNode(&nodeA,"nodeA",NULL,0);
     initNetworkNode(&nodeB,"nodeB",NULL,0);
     initShortestPathNode(&sPathRoot,&nodeA ,NULL,1,1);

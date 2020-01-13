@@ -12,16 +12,21 @@
 #include "ShortestPathListCompare.h"
 #include "LinkedListCompare.h"
 #include "Exception.h"
-#include "Error.h"
+#include "AvlError.h"
+#include "Processor.h"
+#include "ShortestPathError.h"
 
 void findShortestPath(NetworkNode * nNode , char * name){
     List * shortestPathList ;
     ListItem * listItem;
     ShortestPathNode * sPath;
+    if(name == NULL){
+        throwException(ERR_DST_NAME_NULL,"Invalid input destination ode name");
+    }
     shortestPathList = generateShortestPath(nNode);
     listItem =findListItem(shortestPathList,name,(LinkedListCompare)shortestPathListCompare);
     if(listItem == NULL){
-        throwException(ERR_LIST_NULL,"couldnt find and locate the node in ShortestPath");
+        throwException(ERR_SPATH_NODE_NOT_FOUND,"Couldn't find and locate %s in ShortestPath",name);
     }
     printShortestPathDetails(nNode,listItem->data);
 }
@@ -29,12 +34,12 @@ void findShortestPath(NetworkNode * nNode , char * name){
 void printShortestPathDetails(NetworkNode * nNode,ShortestPathNode * sPath){
     ShortestPathNode * currentPath = sPath;
     if(nNode == NULL){
-        throwException(ERR_NODE_NULL,"couldnt print as input networkNode is NULL");
+        throwException(ERR_NETWORK_NODE_NULL,"Couldn't print as input networkNode is NULL");
     }
     else if (sPath == NULL){
-        throwException(ERR_SPATH_NULL,"couldnt print as input shortestPath is NULL");
+        throwException(ERR_SPATH_NULL,"Couldn't print as input shortestPath is NULL");
     }
-    printf("================================= \n");
+    printf("\n================================= \n");
     printf("ShortestPath from source %s to %s \n" ,nNode->name,sPath->id->name);
     printf("Total Path cost is %d \n",sPath->pathCost);
     printf("%s ",currentPath->id->name);
@@ -47,11 +52,41 @@ void printShortestPathDetails(NetworkNode * nNode,ShortestPathNode * sPath){
     printf(" \n================================= \n");
 }
 
+void findAllShortestPathCost(NetworkNode * nNode){
+    List * shortestPathList ;
+    if(nNode == NULL)
+        throwException(ERR_NETWORK_NODE_NULL,"Couldn't print all path cost as input networkNode is NULL");
+    shortestPathList = generateShortestPath(nNode);
+    printf("\nAll Shortest path cost from %s \n",nNode->name);
+    printf("------------------------ \n");
+    listForEach(shortestPathList,(Processor)printPathCostFromShortestPath);
+    printf("------------------------ \n");
+}
+
+void findAllShortestPath(NetworkNode * nNode){
+    List * shortestPathList ;
+    if(nNode == NULL)
+        throwException(ERR_NETWORK_NODE_NULL,"Couldn't print all path cost as input networkNode is NULL");
+    shortestPathList = generateShortestPath(nNode);
+    printf("\nAll Shortest path from %s \n",nNode->name);
+    printf("------------------------ \n");
+    listForEach(shortestPathList,(Processor)printPathCostFromShortestPath);
+    printf("------------------------ \n");
+}
+
+void printPathCostFromShortestPath(ListItem * item){
+    ShortestPathNode * sPath;
+    if (item == NULL)
+        throwException(ERR_SPATH_LIST_ITEM_NULL,"couldn't print as input shortestPath is NULL");
+    sPath = item ->data;
+    printf("| %s's Path cost : %d |\n",sPath->id->name,sPath->pathCost);
+}
+
 List * generateShortestPath(NetworkNode * nNode){
     GraphPath * gPathNode;
     List * linkedList;
     if(nNode == NULL){
-        throwException(ERR_NODE_NOT_FOUND," source node is NULL and couldnt generate ShortestPath ");
+        throwException(ERR_NETWORK_NODE_NULL," source node is NULL and couldn't generate ShortestPath ");
     }
     resetWorkingAVL();
     linkedList = createList(); //initialize the list for shortestPath
@@ -66,8 +101,6 @@ List * generateShortestPath(NetworkNode * nNode){
     }
     return linkedList;
 }
-
-
 
 void addNeighbouringNode(GraphPath* graphPath){
     List * nearestNodeLinkedList;

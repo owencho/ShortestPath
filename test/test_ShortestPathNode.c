@@ -9,7 +9,7 @@
 #include "ListItem.h"
 #include "GraphPath.h"
 #include "CustomAssert.h"
-
+#include "ShortestPathError.h"
 void setUp(void){}
 void tearDown(void){}
 
@@ -60,7 +60,7 @@ void test_createFirstShortestPath(void){
       TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeC,NULL,0,0);
 }
 
-//This function is used to convert the first networkNode into ShortestPathNode
+//This function is used to convert the networkNode in the listItem into ShortestPathNode
 void test_createShortestPathFromLinkItemData(void){
       initLink(&linkItData,1,&nodeA,&nodeC);
       initNetworkNode(&nodeA,"nodeA",NULL,0);

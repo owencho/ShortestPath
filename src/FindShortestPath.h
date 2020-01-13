@@ -8,4 +8,6 @@ void compareAndAddShortestPathIntoWorkingAVL(ShortestPathNode * sPathToAdd);
 void addNeighbouringNode(GraphPath* graphPath);
 void findShortestPath(NetworkNode * nNode , char * name);
 void printShortestPathDetails(NetworkNode *nNode,ShortestPathNode * sPath);
+void printPathCostFromShortestPath(ListItem * item);
+void findAllShortestPathCost(NetworkNode * nNode);
 #endif // _FINDSHORTESTPATH_H

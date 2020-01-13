@@ -6,7 +6,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "Exception.h"
-#include "Error.h"
+#include "AvlError.h"
+#include "ShortestPathError.h"
 #include "List.h"
 #include "CException.h"
 
@@ -60,6 +61,7 @@ void addGraphPathIntoPathCostAVL(ShortestPathNode * sPath){
                                (Node*)newGPath,
                                (Compare)graphCompareForPathCostAvlAdd);
         }Catch(ex){
+            freeException(ex);
             gNode= getGraphPathFromPathCost(sPath->pathCost);
             gNode->listWithSameCost = listAddItemToHead(gNode->listWithSameCost,(void*)newGPath);
             resetCurrentListItem(gNode->listWithSameCost);
@@ -69,7 +71,10 @@ void addGraphPathIntoPathCostAVL(ShortestPathNode * sPath){
 
 void deleteGraphPathFromPathCostAVL(int pathCost,char * name){
     GraphPath * gPath;
+    if(name == NULL)
+        return;
     gPath = getGraphPathFromPathCost(pathCost);
+
     if(gPath == NULL)
         throwException(ERR_NODE_NOT_FOUND," %s with pathCost of %d cant found inside the tree",name,pathCost);
     else if(strcmp(gPath->sPath->id->name ,name)==0)
@@ -84,6 +89,8 @@ void deleteAndOverrideGraphPathWithSameCost(GraphPath * graphPath,int pathCost){
     ListItem * overrideListItem;
     GraphPath * searchPath;
     ListItem * overrideList;
+    if(graphPath == NULL)
+        return;
     deletedGraphPath = (GraphPath*)avlDelete((Node**)&rootTreePathCost,(void*)&pathCost,(Compare)graphCompareForPathCost);
     if(graphPath->listWithSameCost->count !=0){
        overrideListItem =  (ListItem*)graphPath->listWithSameCost->head;
@@ -100,18 +107,20 @@ void deleteAndOverrideGraphPathWithSameCost(GraphPath * graphPath,int pathCost){
 GraphPath * deleteSameCostGraphPathListItem(GraphPath * gPath,char * name){
     ListItem * sameCostItem;
     GraphPath * sameCostGPath;
+    if(gPath == NULL || name == NULL)
+        return gPath;
     resetCurrentListItem(gPath->listWithSameCost);
     sameCostItem = getCurrentListItem(gPath->listWithSameCost);
     while(sameCostItem != NULL){
         sameCostGPath = (GraphPath*)sameCostItem->data;
         if(strcmp(sameCostGPath->sPath->id->name ,name)==0){
-            deleteSelectedListItem(gPath->listWithSameCost,sameCostGPath,(LinkedListCompare)graphCompareForSameCostList);
+            deleteSelectedListItem(gPath->listWithSameCost,sameCostGPath,(LinkedListCompare)listCompareForListWithSameCostGraph);
             break;
         }
         sameCostItem = getNextListItem(gPath->listWithSameCost);
     }
     if(sameCostItem == NULL){
-        throwException(ERR_NODE_NOT_FOUND,"couldnt delete %s on graphPath cost tree",name);
+        throwException(ERR_NODE_NOT_FOUND,"couldn't delete %s on graphPath cost tree",name);
     }
     resetCurrentListItem(gPath->listWithSameCost);
     return gPath;
@@ -163,16 +172,18 @@ void addGraphPathIntoPathNameAVL(ShortestPathNode * sPath){
 
 void deleteGraphPathFromPathNameAVL(char * name){
     GraphPath * deletedGraphPath;
+    if(name == NULL)
+        return;
     Try{
         deletedGraphPath = (GraphPath*)avlDelete((Node**)&rootTreeNodeName,name,(Compare)graphCompareForName);
         freeGraphPath(deletedGraphPath);
     }Catch(ex) {
-        throwException(ERR_NODE_NOT_FOUND,"%s does not exist inside the working tree and couldnt remove the node ",name);
+        throwException(ERR_NODE_NOT_FOUND,"%s does not exist inside the working tree and couldn't remove the node ",name);
     }
 }
 
 GraphPath * getGraphPathFromNodeName(char * nodeName){
-    if(rootTreeNodeName == NULL){
+    if(rootTreeNodeName == NULL || nodeName == NULL){
         return NULL;
     }
     return _getGraphPath((void*)nodeName,rootTreeNodeName,(Compare)graphCompareForName);

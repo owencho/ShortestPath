@@ -7,6 +7,7 @@
 #include "NetworkNode.h"
 #include "List.h"
 #include "LinkedListCompare.h"
+#include "ShortestPathError.h"
 ShortestPathNode sPathRoot,sPathNode;
 NetworkNode nodeA,nodeB,nodeC,nodeD;
 ListItem listItem;

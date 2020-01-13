@@ -13,7 +13,7 @@
 #include "Balance.h"
 #include "Rotate.h"
 #include "Exception.h"
-#include "Error.h"
+#include "AvlError.h"
 #include "NetworkNode.h"
 #include "List.h"
 #include "ListItem.h"
@@ -23,20 +23,25 @@
 #include "GraphCompare.h"
 #include "CustomAssert.h"
 #include "ShortestPathListCompare.h"
-ShortestPathNode sPathA ,sPathB,sPathC,sPathD,sPathE;
-Link linkItemDataCD,linkItemDataCA,linkItemDataCB;
-Link linkItemDataAC,linkItemDataAB;
+#include "ShortestPathError.h"
+#include "Processor.h"
+ShortestPathNode sPathA ,sPathB,sPathC,sPathD,sPathE,sPathF;
+Link linkItemDataCA,linkItemDataCB,linkItemDataCD,linkItemDataCE;
+Link linkItemDataAC,linkItemDataAB,linkItemDataAD;
 Link linkItemDataBC,linkItemDataBA,linkItemDataBD,linkItemDataBE;
-Link linkItemDataDC,linkItemDataDB,linkItemDataDE;
-Link linkItemDataED,linkItemDataEB;
-ListItem listItemCD,listItemCA,listItemCB;
-ListItem listItemAC,listItemAB;
+Link linkItemDataDC,linkItemDataDB,linkItemDataDE,linkItemDataDA,linkItemDataDF;
+Link linkItemDataED,linkItemDataEB,linkItemDataEC,linkItemDataEF;
+Link linkItemDataFD ,linkItemDataFE;
+
+ListItem listItemAC,listItemAB,listItemAD;
 ListItem listItemBC,listItemBA,listItemBD,listItemBE;
-ListItem listItemDC,listItemDE,listItemDB;
-ListItem listItemEB,listItemED;
-NetworkNode nodeA ,nodeB,nodeC,nodeD,nodeE;
+ListItem listItemCA,listItemCB,listItemCD,listItemCE;
+ListItem listItemDA,listItemDB,listItemDC,listItemDE,listItemDF;
+ListItem listItemEB,listItemED,listItemEC,listItemEF;
+ListItem listItemFD , listItemFE;
+NetworkNode nodeA ,nodeB,nodeC,nodeD,nodeE,nodeF;
 ShortestPathNode * outSPathNode;
-List networkListC,networkListA,networkListB,networkListD,networkListE;
+List networkListC,networkListA,networkListB,networkListD,networkListE,networkListF;
 List shortestPathList;
 List * outLinkedList;
 ListItem * outListItem;
@@ -177,6 +182,73 @@ void initFullNetworkMap(void){
     initNetworkNode(&nodeE ,"nodeE",&networkListE,0);
 }
 
+/**
+*                  ( F )
+*              6 /     \ 8
+*            ( D )      ( E )
+*             | 2 \   4 /  |
+*         10  |   ( C )    | 1
+*            | 2 /   5 \  |
+*           (A) ------- (B)
+*                 1
+**/
+void initComplexNetworkMap(void){
+
+    initLink(&linkItemDataAC,2,&nodeC ,&nodeA);
+    initLink(&linkItemDataAD,10,&nodeD ,&nodeA);
+    initLink(&linkItemDataAB,1,&nodeB ,&nodeA);
+    initListItem(&listItemAC ,&listItemAD,(void*) &linkItemDataAC);
+    initListItem(&listItemAD ,&listItemAB,(void*) &linkItemDataAD);
+    initListItem(&listItemAB ,NULL,(void*) &linkItemDataAB);
+    initList(&networkListA, &listItemAC ,&listItemAB ,3 ,&listItemAC);
+
+    initLink(&linkItemDataBC,5,&nodeC ,&nodeB);
+    initLink(&linkItemDataBA,1,&nodeA,&nodeB);
+    initLink(&linkItemDataBE,1,&nodeE,&nodeB);
+    initListItem(&listItemBC ,&listItemBE,(void*) &linkItemDataBC);
+    initListItem(&listItemBA ,&listItemBC,(void*) &linkItemDataBA);
+    initListItem(&listItemBE ,NULL,(void*) &linkItemDataBE);
+    initList(&networkListB, &listItemBA ,&listItemBE ,3 ,&listItemBA);
+
+    initLink(&linkItemDataCA,2,&nodeA ,&nodeC);
+    initLink(&linkItemDataCB,5,&nodeB ,&nodeC);
+    initLink(&linkItemDataCD,2,&nodeD,&nodeC);
+    initLink(&linkItemDataCE,4,&nodeE,&nodeC);
+    initListItem(&listItemCA ,&listItemCD,(void*) &linkItemDataCA);
+    initListItem(&listItemCB ,NULL,(void*) &linkItemDataCB);
+    initListItem(&listItemCE ,&listItemCB,(void*)&linkItemDataCE);
+    initListItem(&listItemCD ,&listItemCE,(void*)&linkItemDataCD);
+    initList(&networkListC, &listItemCA ,&listItemCB ,4 ,&listItemCA);
+
+    initLink(&linkItemDataDC,2,&nodeC ,&nodeD);
+    initLink(&linkItemDataDA,10,&nodeA ,&nodeD);
+    initLink(&linkItemDataDF,6,&nodeF ,&nodeD);
+    initListItem(&listItemDC ,&listItemDA,(void*) &linkItemDataDC);
+    initListItem(&listItemDF ,NULL,(void*) &linkItemDataDF);
+    initListItem(&listItemDA ,&listItemDF,(void*) &linkItemDataDA);
+    initList(&networkListD, &listItemDC ,&listItemDF ,3 ,&listItemDC);
+
+    initLink(&linkItemDataEB,1,&nodeB ,&nodeE);
+    initLink(&linkItemDataEC,4,&nodeC ,&nodeE);
+    initLink(&linkItemDataEF,8,&nodeF ,&nodeE);
+    initListItem(&listItemEB ,&listItemEF,(void*) &linkItemDataEB);
+    initListItem(&listItemEF ,&listItemEC,(void*) &linkItemDataEF);
+    initListItem(&listItemEC ,NULL,(void*) &linkItemDataEC);
+    initList(&networkListE, &listItemEB ,&listItemEC ,3 ,&listItemEB);
+
+    initLink(&linkItemDataFD,6,&nodeD ,&nodeF);
+    initLink(&linkItemDataFE,8,&nodeE ,&nodeF);
+    initListItem(&listItemFD ,&listItemFE,(void*) &linkItemDataFD);
+    initListItem(&listItemFE ,NULL,(void*) &linkItemDataED);
+    initList(&networkListF, &listItemFD ,&listItemFE ,2 ,&listItemFD);
+
+    initNetworkNode(&nodeA ,"nodeA",&networkListA,0);
+    initNetworkNode(&nodeB ,"nodeB",&networkListB,0);
+    initNetworkNode(&nodeC ,"nodeC",&networkListC,0);
+    initNetworkNode(&nodeD ,"nodeD",&networkListD,0);
+    initNetworkNode(&nodeE ,"nodeE",&networkListE,0);
+    initNetworkNode(&nodeF ,"nodeF",&networkListF,0);
+}
 //////////////compareAndAddShortestPathIntoWorkingAVL/////////////////////////////////////////////////////
 //compareAndAddShortestPathIntoWorkingAVL is function to compare new path cost and old path cost
 // and determine the node should be override or not
@@ -466,7 +538,7 @@ void test_generateShortestPath_network_node_NULL(void){
         TEST_FAIL_MESSAGE("expecting exception to be thrown");
     }Catch(ex) {
         dumpException(ex);
-        TEST_ASSERT_EQUAL(ERR_NODE_NOT_FOUND,ex->errorCode);
+        TEST_ASSERT_EQUAL(ERR_NETWORK_NODE_NULL,ex->errorCode);
     }
 }
 //////////////printShortestPathDetails/////////////////////////////////////////////////////
@@ -506,7 +578,7 @@ void test_printShortestPathDetails_networkNode_NULL(void){
         TEST_FAIL_MESSAGE("expecting exception to be thrown");
     }Catch(ex) {
         dumpException(ex);
-        TEST_ASSERT_EQUAL(ERR_NODE_NULL,ex->errorCode);
+        TEST_ASSERT_EQUAL(ERR_NETWORK_NODE_NULL,ex->errorCode);
     }
 }
 
@@ -536,6 +608,7 @@ void test_printShortestPathDetails_Spath_NULL(void){
 *            (C)------(D)
 *                   2
 **/
+//From source C to nodeB
 void test_findShortestPath(void){
     initFullNetworkMap();
     Try{
@@ -563,6 +636,25 @@ void test_findShortestPath_differentSource(void){
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
     }
 }
+/**
+*                  ( F )
+*              6 /     \ 8
+*            ( D )      ( E )
+*             | 2 \   4 /  |
+*         10  |   ( C )    | 1
+*            | 2 /   5 \  |
+*           (A) ------- (B)
+*                 1
+**/
+  void test_findShortestPath_complex_map(void){
+      initComplexNetworkMap();
+      Try{
+          findShortestPath(&nodeA,"nodeF");
+      }Catch(ex) {
+          dumpException(ex);
+          TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+      }
+  }
 
 void test_findShortestPath_network_node_NULL(void){
     initFullNetworkMap();
@@ -571,7 +663,7 @@ void test_findShortestPath_network_node_NULL(void){
         TEST_FAIL_MESSAGE("expecting exception to be thrown");
     }Catch(ex) {
         dumpException(ex);
-        TEST_ASSERT_EQUAL(ERR_NODE_NOT_FOUND,ex->errorCode);
+        TEST_ASSERT_EQUAL(ERR_NETWORK_NODE_NULL,ex->errorCode);
     }
 }
 
@@ -582,6 +674,64 @@ void test_findShortestPath_dst_name_NULL(void){
         TEST_FAIL_MESSAGE("expecting exception to be thrown");
     }Catch(ex) {
         dumpException(ex);
-        TEST_ASSERT_EQUAL(ERR_LIST_NULL,ex->errorCode);
+        TEST_ASSERT_EQUAL(ERR_DST_NAME_NULL,ex->errorCode);
     }
+}
+//////////////printPathCostFromShortestPath/////////////////////////////////////////////////////
+//printPathCostFromShortestPath is function to print shortestPath path Cost
+
+void test_printPathCostFromShortestPath(void){
+    initFullNetworkMap();
+    initShortestPathNode(&sPathA,&nodeA ,NULL,2,1);
+    ListItem * item;
+    item->data = (void*)&sPathA;
+    Try{
+        printPathCostFromShortestPath(item);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
+void test_printPathCostFromShortestPath_listItem_name_NULL(void){
+    Try{
+        printPathCostFromShortestPath(NULL);
+        TEST_FAIL_MESSAGE("expecting exception to be thrown");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_SPATH_LIST_ITEM_NULL,ex->errorCode);
+    }
+}
+//////////////findAllShortestPathCost/////////////////////////////////////////////////////
+//findAllShortestPathCost is function to find all shortestPath path Cost and print
+
+void test_findAllShortestPathCost(void){
+    initFullNetworkMap();
+    Try{
+        findAllShortestPathCost(&nodeC);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+
+}
+/**
+*                  ( F )
+*              6 /     \ 8
+*            ( D )      ( E )
+*             | 2 \   4 /  |
+*         10  |   ( C )    | 1
+*            | 2 /   5 \  |
+*           (A) ------- (B)
+*                 1
+**/
+void test_findAllShortestPathCost_complex_map(void){
+    initComplexNetworkMap();
+    Try{
+        findAllShortestPathCost(&nodeA);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+
 }
