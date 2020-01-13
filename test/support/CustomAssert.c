@@ -59,45 +59,6 @@ void assertEqualShortestPath(const ShortestPathNode * actualShortestPath,
 
 
 
-void assertEqualLink(const Link * actualLinkItemData,
-                     const NetworkNode * head,
-                     const NetworkNode * tail,
-                     const int cost,
-                     const UNITY_LINE_TYPE lineNumber){
-
-    char msg[1024];
-    int length;
-    int i;
-
-    if(actualLinkItemData == NULL){
-        UNITY_TEST_FAIL(lineNumber,"The actual linkItemData is NULL");
-    }
-    if(actualLinkItemData->head != head){
-        if(head == NULL){
-            sprintf(msg,"the actual head node is %s and not NULL",actualLinkItemData->head->name);
-        }
-        else{
-            sprintf(msg,"Expected %s but encountered %s in actualLinkItemData , the head node is not the same",head->name,actualLinkItemData->head->name);
-        }
-        UNITY_TEST_FAIL(lineNumber,msg);
-    }
-    if(actualLinkItemData->tail != tail){
-        if(tail == NULL){
-            sprintf(msg,"the actual tail node is %s and not NULL",actualLinkItemData->tail->name);
-        }
-        else{
-            sprintf(msg,"Expected tail node %s but encountered tail node %s in actualLinkItemData , the tail node is not the same",tail->name,actualLinkItemData->tail->name);
-        }
-        UNITY_TEST_FAIL(lineNumber,msg);
-    }
-    if(actualLinkItemData->cost != cost){
-        sprintf(msg,"Expected %d but encountered %d in actualLinkItemData, the cost on from %s to  %s is not the same",
-                cost,actualLinkItemData->cost,actualLinkItemData->tail->name,actualLinkItemData->head->name);
-        UNITY_TEST_FAIL(lineNumber,msg);
-    }
-}
-
-
 void testReportFailure (UNITY_LINE_TYPE lineNumber,char* message ,...){
     int actualLength;
     char* buffer;

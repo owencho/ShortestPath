@@ -27,11 +27,15 @@ GraphPath *createGraphPath(ShortestPathNode * sPath){
 //main function
 // add the node into both working tree
 void addGraphPathIntoWorkingAVL(ShortestPathNode * sPath){
+    if(sPath == NULL)
+        return;
     addGraphPathIntoPathCostAVL(sPath);
     addGraphPathIntoPathNameAVL(sPath);
 }
 
 void deleteGraphPathFromWorkingAVL(ShortestPathNode * sPath){
+    if(sPath == NULL)
+        return;
     deleteGraphPathFromPathCostAVL(sPath->pathCost,sPath->id->name);
     deleteGraphPathFromPathNameAVL(sPath->id->name);
 }
@@ -140,6 +144,8 @@ void resetPathCostAVL(void){
 void addGraphPathIntoPathNameAVL(ShortestPathNode * sPath){
     GraphPath * gNode;
     ListItem * newItem;
+    if(sPath==NULL)
+        return;
     if(rootTreeNodeName == NULL){
         rootTreeNodeName = createGraphPath(sPath);
     }
@@ -176,7 +182,7 @@ void resetNodeNameAVL(void){
     freeGraphPath(rootTreeNodeName);
     rootTreeNodeName = NULL;
 }
-
+//Shared Function
 GraphPath * _getGraphPath(void * valuePtr,GraphPath * root,Compare compare){
     int size = compare((void*)root,valuePtr);
     GraphPath * foundNode = NULL;

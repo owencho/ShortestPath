@@ -11,12 +11,12 @@ void addGraphPathIntoWorkingAVL(ShortestPathNode * sPath);
 void deleteGraphPathFromWorkingAVL(ShortestPathNode * sPath);
 void resetWorkingAVL(void);
 //Working Tree for PathCost
+GraphPath * getGraphPathFromPathCost(int pathCost);
+GraphPath * findSmallestPathCostFromAVL(void);
 void  addGraphPathIntoPathCostAVL(ShortestPathNode * sPath);
 void  deleteGraphPathFromPathCostAVL(int pathCost,char * name);
 void  deleteAndOverrideGraphPathWithSameCost(GraphPath * graphPath,int pathCost);
 GraphPath * deleteSameCostGraphPathListItem(GraphPath * gPath,char * name);
-GraphPath * getGraphPathFromPathCost(int pathCost);
-GraphPath * findSmallestPathCostFromAVL(void);
 void  resetPathCostAVL(void);
 //Working Tree for PathName
 void  addGraphPathIntoPathNameAVL(ShortestPathNode * sPath);

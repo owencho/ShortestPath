@@ -24,6 +24,10 @@ void initShortestPathNode(ShortestPathNode *sPath,NetworkNode * id ,ShortestPath
     sPath->pathCost = pathCost;
     sPath->linkCost = linkCost;
 }
+//////////////shortestPathListCompare/////////////////////////////////////////////////////
+//shortestPathListCompare is function to compare shortestPath inside data of listItem
+// this function is used in FindShortestPath to find the destinated Node for the shortestPath data
+// by comparing listItem and the input Node name
 void test_ShortestPathListCompare_input_same_name(void){
     LinkedListCompare compare = (LinkedListCompare)shortestPathListCompare;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);

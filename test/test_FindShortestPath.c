@@ -83,6 +83,7 @@ void initListItem(ListItem * listItem ,ListItem * next,void * data){
     listItem->next = next;
     listItem->data = data;
 }
+
 /**
 *              (3)
 *         (A)----- (B)
@@ -176,6 +177,9 @@ void initFullNetworkMap(void){
     initNetworkNode(&nodeE ,"nodeE",&networkListE,0);
 }
 
+//////////////compareAndAddShortestPathIntoWorkingAVL/////////////////////////////////////////////////////
+//compareAndAddShortestPathIntoWorkingAVL is function to compare new path cost and old path cost
+// and determine the node should be override or not
 /**
 *                                    compares with sPathD
 *                            (A)2     with nodeC id        (A)2
@@ -297,7 +301,8 @@ void test_compareAndAddShortestPathIntoWorkingAVL_with_marked_node(void){
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
     }
 }
-
+//////////////addNeighbouringNode/////////////////////////////////////////////////////
+//addNeighbouringNode is function to add nearest node into working AVL TREE
 /**
 *              (3)
 *         (A)----- (B)                         (D)2         (D)2
@@ -371,7 +376,10 @@ void test_addNeighbouringNode_NULL_input(void){
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
     }
 }
-
+//////////////generateShortestPath/////////////////////////////////////////////////////
+//generateShortestPath is function to generate shortestPath list with all details from source
+// to all node
+//
 /**
 *              (3)
 *         (A)----- (B)
@@ -461,6 +469,8 @@ void test_generateShortestPath_network_node_NULL(void){
         TEST_ASSERT_EQUAL(ERR_NODE_NOT_FOUND,ex->errorCode);
     }
 }
+//////////////printShortestPathDetails/////////////////////////////////////////////////////
+//printShortestPathDetails is function to print shortestPath details to users
 /**
 *              (3)       (1)
 *         (A)----- (B) ----- (E)
@@ -516,7 +526,8 @@ void test_printShortestPathDetails_Spath_NULL(void){
     }
 }
 
-
+//////////////findShortestPath/////////////////////////////////////////////////////
+//findShortestPath is main function to find shortestPath from the source to destination node
 /**
 *              (3)       (1)
 *         (A)----- (B) ----- (E)
