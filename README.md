@@ -1,7 +1,7 @@
 # ShortestPath
 
 ## 1.0 About Shortest Path
-This is the Shortest Path project which a algorithm that search and find the shortest path from the source to the destination node
+This is the Shortest Path project which a algorithm that search and find the shortest path from the source to the destination node. \
 The findShortestPath function will generate a list of shortestPath from the source to all Node and print out the shortestPath with the path cost from the user input.
 
 This Shortest Path is based on one of the shortest path algorithm which is called Dijkstra algorithm that allows user
