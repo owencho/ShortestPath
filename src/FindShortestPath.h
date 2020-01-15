@@ -3,11 +3,20 @@
 #include "GraphPath.h"
 #include "Node.h"
 #include "GraphCompare.h"
+
+//main function
+void findShortestPath(NetworkNode * nNode , char * name);
+void findAllShortestPathCost(NetworkNode * nNode);  
+void findAllShortestPathLink(NetworkNode * nNode);
+
+// function that made find shortestPath work
 List * generateShortestPath(NetworkNode * nNode);
 void compareAndAddShortestPathIntoWorkingAVL(ShortestPathNode * sPathToAdd);
 void addNeighbouringNode(GraphPath* graphPath);
-void findShortestPath(NetworkNode * nNode , char * name);
+
+//function for printing
 void printShortestPathDetails(NetworkNode *nNode,ShortestPathNode * sPath);
+void printSinglePath(ShortestPathNode * sPath);
 void printPathCostFromShortestPath(ListItem * item);
-void findAllShortestPathCost(NetworkNode * nNode);
+void printPathLinkFromShortestPath(ListItem * item);
 #endif // _FINDSHORTESTPATH_H

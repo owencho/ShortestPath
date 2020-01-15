@@ -30,57 +30,29 @@ void findShortestPath(NetworkNode * nNode , char * name){
     printShortestPathDetails(nNode,listItem->data);
 }
 
-void printShortestPathDetails(NetworkNode * nNode,ShortestPathNode * sPath){
-    ShortestPathNode * currentPath = sPath;
-    if(nNode == NULL){
-        throwException(ERR_NETWORK_NODE_NULL,"Couldn't print as input networkNode is NULL");
-    }
-    else if (sPath == NULL){
-        throwException(ERR_SPATH_NULL,"Couldn't print as input shortestPath is NULL");
-    }
-    printf("\n================================= \n");
-    printf("ShortestPath from source %s to %s \n" ,nNode->name,sPath->id->name);
-    printf("Total Path cost is %d \n",sPath->pathCost);
-    printf("%s ",currentPath->id->name);
-    currentPath = currentPath->parent;
-    while(currentPath != NULL){
-        printf("< ");
-        printf("%s ",currentPath->id->name);
-        currentPath = currentPath->parent;
-    }
-    printf(" \n================================= \n");
-}
-
 void findAllShortestPathCost(NetworkNode * nNode){
     List * shortestPathList ;
     if(nNode == NULL)
         throwException(ERR_NETWORK_NODE_NULL,"Couldn't print all path cost as input networkNode is NULL");
     shortestPathList = generateShortestPath(nNode);
     printf("\nAll Shortest path cost from %s \n",nNode->name);
-    printf("------------------------ \n");
+    printf("-------------------------------- \n");
     listForEach(shortestPathList,(Processor)printPathCostFromShortestPath);
-    printf("------------------------ \n");
+    printf("-------------------------------- \n \n");
 }
 
-void findAllShortestPath(NetworkNode * nNode){
+void findAllShortestPathLink(NetworkNode * nNode){
     List * shortestPathList ;
     if(nNode == NULL)
-        throwException(ERR_NETWORK_NODE_NULL,"Couldn't print all path cost as input networkNode is NULL");
+        throwException(ERR_NETWORK_NODE_NULL,"Couldn't print all path link as input networkNode is NULL");
     shortestPathList = generateShortestPath(nNode);
-    printf("\nAll Shortest path from %s \n",nNode->name);
-    printf("------------------------ \n");
-    listForEach(shortestPathList,(Processor)printPathCostFromShortestPath);
-    printf("------------------------ \n");
+    printf("\nAll Shortest path link from %s \n",nNode->name);
+    printf("-------------------------------- \n");
+    listForEach(shortestPathList,(Processor)printPathLinkFromShortestPath);
+    printf("-------------------------------- \n \n");
 }
 
-void printPathCostFromShortestPath(ListItem * item){
-    ShortestPathNode * sPath;
-    if (item == NULL)
-        throwException(ERR_SPATH_LIST_ITEM_NULL,"couldn't print as input shortestPath is NULL");
-    sPath = item ->data;
-    printf("| %s's Path cost : %d |\n",sPath->id->name,sPath->pathCost);
-}
-
+// Generating ShortestPath
 List * generateShortestPath(NetworkNode * nNode){
     GraphPath * gPathNode;
     List * linkedList;
@@ -135,4 +107,53 @@ void compareAndAddShortestPathIntoWorkingAVL(ShortestPathNode * sPathToAdd){
         }
         addGraphPathIntoWorkingAVL(sPathToAdd);  //add the node into working Tree
     }
+}
+
+//printing output function
+void printShortestPathDetails(NetworkNode * nNode,ShortestPathNode * sPath){
+    ShortestPathNode * currentPath = sPath;
+    if(nNode == NULL){
+        throwException(ERR_NETWORK_NODE_NULL,"Couldn't print as input networkNode is NULL");
+    }
+    else if (sPath == NULL){
+        throwException(ERR_SPATH_NULL,"Couldn't print as input shortestPath is NULL");
+    }
+    printf("\n======================================= \n");
+    printf("ShortestPath from source %s to %s \n" ,nNode->name,sPath->id->name);
+    printf("Total Path cost is %d \n",sPath->pathCost);
+    printSinglePath(sPath);
+    printf("\n======================================= \n \n");
+}
+
+void printSinglePath(ShortestPathNode * sPath){
+    int pathCost;
+    if(sPath == NULL)
+        return;
+    pathCost = sPath->pathCost;
+    printf("\n");
+    printf("%s ",sPath->id->name);
+    sPath = sPath->parent;
+    while(sPath != NULL){
+        printf("< ");
+        printf("%s ",sPath->id->name);
+        sPath = sPath->parent;
+    }
+    printf("\n (Total Cost : %d) ",pathCost);
+}
+
+void printPathLinkFromShortestPath(ListItem * item){
+    ShortestPathNode * sPath;
+    if (item == NULL)
+        throwException(ERR_SPATH_LIST_ITEM_NULL,"couldn't print as input shortestPath is NULL");
+    sPath = item ->data;
+    printSinglePath(sPath);
+    printf ("\n");
+}
+
+void printPathCostFromShortestPath(ListItem * item){
+    ShortestPathNode * sPath;
+    if (item == NULL)
+        throwException(ERR_SPATH_LIST_ITEM_NULL,"couldn't print as input shortestPath is NULL");
+    sPath = item ->data;
+    printf("| %s's Path cost : %d  \t  | \n",sPath->id->name,sPath->pathCost);
 }

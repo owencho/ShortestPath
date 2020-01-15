@@ -194,18 +194,8 @@ void test_addGraphPathIntoWorkingAVL_inputNULL(void){
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
     }
 }
-void test_resetWorkingAVL_reset_all_Tree(void){
-    initShortestPathNodeDEF();
-    resetAndAddNodeNameDEF();
-    Try{
-        resetWorkingAVL();
-        TEST_ASSERT_NULL(rootTreePathCost);
-        TEST_ASSERT_NULL(rootTreeNodeName);
-    }Catch(ex) {
-        dumpException(ex);
-        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
-    }
-}
+
+
 //////////////deleteGraphPathFromWorkingAVL/////////////////////////////////////////////////////
 /**
 *
@@ -288,6 +278,20 @@ void test_deleteGraphPathFromWorkingAVL_inputNULL(void){
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
     }
 
+}
+//////////////resetWorkingAVL/////////////////////////////////////////////////////
+//resetWorkingAVL is a function that free all node in both tree and reset both tree
+void test_resetWorkingAVL_reset_all_Tree(void){
+    initShortestPathNodeDEF();
+    resetAndAddNodeNameDEF();
+    Try{
+        resetWorkingAVL();
+        TEST_ASSERT_NULL(rootTreePathCost);
+        TEST_ASSERT_NULL(rootTreeNodeName);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
 }
 
 void test_resetWorkingAVL(void){

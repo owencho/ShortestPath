@@ -248,6 +248,219 @@ void initComplexNetworkMap(void){
     initNetworkNode(&nodeE ,"nodeE",&networkListE,0);
     initNetworkNode(&nodeF ,"nodeF",&networkListF,0);
 }
+//////////////findShortestPath/////////////////////////////////////////////////////
+//findShortestPath is main function to find shortestPath from the source to destination node
+/**
+*              (3)       (1)
+*         (A)----- (B) ----- (E)
+*        1 \     7 / \ 5    /
+*           \    /    \   /  (7)
+*            (C)------(D)
+*                   2
+**/
+//From source C to nodeB
+void test_findShortestPath(void){
+    initFullNetworkMap();
+    Try{
+        findShortestPath(&nodeC,"nodeB");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+
+}
+/**
+*              (3)       (1)
+*         (A)----- (B) ----- (E)
+*        1 \     7 / \ 5    /
+*           \    /    \   /  (7)
+*            (C)------(D)
+*                   2
+**/
+void test_findShortestPath_differentSource(void){
+    initFullNetworkMap();
+    Try{
+        findShortestPath(&nodeE,"nodeC");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+/**
+*                  ( F )
+*              6 /     \ 8
+*            ( D )      ( E )
+*             | 2 \   4 /  |
+*         10  |   ( C )    | 1
+*            | 2 /   5 \  |
+*           (A) ------- (B)
+*                 1
+**/
+void test_findShortestPath_complex_map(void){
+    initComplexNetworkMap();
+    Try{
+        findShortestPath(&nodeA,"nodeF");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
+void test_findShortestPath_network_node_NULL(void){
+    initFullNetworkMap();
+    Try{
+        findShortestPath(NULL,"nodeC");
+        TEST_FAIL_MESSAGE("expecting exception to be thrown");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_NETWORK_NODE_NULL,ex->errorCode);
+    }
+}
+
+void test_findShortestPath_dst_name_NULL(void){
+    initFullNetworkMap();
+    Try{
+        findShortestPath(&nodeE,NULL);
+        TEST_FAIL_MESSAGE("expecting exception to be thrown");
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_DST_NAME_NULL,ex->errorCode);
+    }
+}
+
+//////////////findAllShortestPathCost/////////////////////////////////////////////////////
+//findAllShortestPathCost is function to find all shortestPath path Cost and print
+
+void test_findAllShortestPathCost(void){
+    initFullNetworkMap();
+    Try{
+        findAllShortestPathCost(&nodeC);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+
+}
+
+void test_findAllShortestPathCost_input_NULL(void){
+    initFullNetworkMap();
+    Try{
+        findAllShortestPathCost(NULL);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_NETWORK_NODE_NULL,ex->errorCode);
+    }
+
+}
+/**
+*                  ( F )
+*              6 /     \ 8
+*            ( D )      ( E )
+*             | 2 \   4 /  |
+*         10  |   ( C )    | 1
+*            | 2 /   5 \  |
+*           (A) ------- (B)
+*                 1
+**/
+void test_findAllShortestPathCost_complex_map(void){
+    initComplexNetworkMap();
+    Try{
+        printf("Complex network \n");
+        findAllShortestPathCost(&nodeA);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
+/**
+*                  ( F )
+*              6 /     \ 8
+*            ( D )      ( E )
+*             | 2 \   4 /  |
+*         10  |   ( C )    | 1
+*            | 2 /   5 \  |
+*           (A) ------- (B)
+*                 1
+**/
+void test_findAllShortestPathCost_complex_map_nodeD(void){
+    initComplexNetworkMap();
+    Try{
+        printf("Complex network \n");
+        findAllShortestPathCost(&nodeD);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
+//////////////findAllShortestPathLink/////////////////////////////////////////////////////
+//findAllShortestPathLink is function to find all shortestPath path link and print
+
+void test_findAllShortestPathLink(void){
+    initFullNetworkMap();
+    Try{
+        findAllShortestPathLink(&nodeC);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+
+}
+
+void test_findAllShortestPathLink_input_NULL(void){
+    initFullNetworkMap();
+    Try{
+        findAllShortestPathLink(NULL);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_ASSERT_EQUAL(ERR_NETWORK_NODE_NULL,ex->errorCode);
+    }
+
+}
+/**
+*                  ( F )
+*              6 /     \ 8
+*            ( D )      ( E )
+*             | 2 \   4 /  |
+*         10  |   ( C )    | 1
+*            | 2 /   5 \  |
+*           (A) ------- (B)
+*                 1
+**/
+void test_findAllShortestPathLink_complex_map(void){
+    initComplexNetworkMap();
+    Try{
+        printf("Complex network \n");
+        findAllShortestPathLink(&nodeA);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+
+}
+
+/**
+*                  ( F )
+*              6 /     \ 8
+*            ( D )      ( E )
+*             | 2 \   4 /  |
+*         10  |   ( C )    | 1
+*            | 2 /   5 \  |
+*           (A) ------- (B)
+*                 1
+**/
+void test_findAllShortestPathLink_complex_map_nodeD(void){
+    initComplexNetworkMap();
+    Try{
+        printf("Complex network \n");
+        findAllShortestPathLink(&nodeD);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
 //////////////compareAndAddShortestPathIntoWorkingAVL/////////////////////////////////////////////////////
 //compareAndAddShortestPathIntoWorkingAVL is function to compare new path cost and old path cost
 // and determine the node should be override or not
@@ -372,81 +585,7 @@ void test_compareAndAddShortestPathIntoWorkingAVL_with_marked_node(void){
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
     }
 }
-//////////////addNeighbouringNode/////////////////////////////////////////////////////
-//addNeighbouringNode is function to add nearest node into working AVL TREE
-/**
-*              (3)
-*         (A)----- (B)                         (D)2         (D)2
-*        1 \     7 /        -------->         /   \    -->     \
-*           \    /                          (A)1  (B)7         (B)7
-*            (C)------(D)
-*                   2
-**/
-void test_addNeighbouringNode(void){
-    initPartialNetworkMap();
-    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
-    initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
-    initGraphPath(&gPath,NULL,NULL,0,&sPathC);
-    initGraphPath(&gPathA,NULL,NULL,0,&sPathA);
-    Try{
-        resetWorkingAVL();
-        addNeighbouringNode(&gPath); //nearestNode from source C
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeD,&sPathC,2,2);
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeB,&sPathC,7,7);
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->left->sPath,&nodeA,&sPathC,1,1);
-        //mark C
-        gPath.sPath->id->marked = 1;
-        deleteGraphPathFromWorkingAVL(&sPathA);
-        addNeighbouringNode(&gPathA); //nearestNode from source A
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeD,&sPathC,2,2);
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeB,&sPathA,4,3);
-        TEST_ASSERT_NULL(rootTreePathCost->left);
-    }Catch(ex) {
-        dumpException(ex);
-        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
-    }
-}
 
-/**
-*              (3)
-*         (A)----- (B)                          (D)2
-*        1 \     7 /        -------->              \
-*           \    /                                (B)7
-*            (C)------(D)
-*                   2
-**/
-// A is marked
-void test_addNeighbouringNode_one_of_the_path_is_marked(void){
-    initPartialNetworkMap();
-    initNetworkNode(&nodeA ,"nodeA",&networkListA,1); //nodeA is marked
-    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
-    initGraphPath(&gPath,NULL,NULL,0,&sPathC);
-    Try{
-        resetWorkingAVL();
-        addNeighbouringNode(&gPath);
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeD,&sPathC,2,2);
-        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeB,&sPathC,7,7);
-        TEST_ASSERT_NULL(rootTreePathCost->left);
-    }Catch(ex) {
-        dumpException(ex);
-        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
-    }
-}
-
-void test_addNeighbouringNode_NULL_input(void){
-    initPartialNetworkMap();
-    initNetworkNode(&nodeA ,"nodeA",&networkListA,1); //nodeA is marked
-    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
-    initGraphPath(&gPath,NULL,NULL,0,&sPathC);
-    Try{
-        resetWorkingAVL();
-        addNeighbouringNode(NULL);
-        TEST_ASSERT_NULL(rootTreePathCost);
-    }Catch(ex) {
-        dumpException(ex);
-        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
-    }
-}
 //////////////generateShortestPath/////////////////////////////////////////////////////
 //generateShortestPath is function to generate shortestPath list with all details from source
 // to all node
@@ -540,6 +679,83 @@ void test_generateShortestPath_network_node_NULL(void){
         TEST_ASSERT_EQUAL(ERR_NETWORK_NODE_NULL,ex->errorCode);
     }
 }
+//////////////addNeighbouringNode/////////////////////////////////////////////////////
+//addNeighbouringNode is function to add nearest node into working AVL TREE
+/**
+*              (3)
+*         (A)----- (B)                         (D)2         (D)2
+*        1 \     7 /        -------->         /   \    -->     \
+*           \    /                          (A)1  (B)7         (B)7
+*            (C)------(D)
+*                   2
+**/
+void test_addNeighbouringNode(void){
+    initPartialNetworkMap();
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
+    initGraphPath(&gPath,NULL,NULL,0,&sPathC);
+    initGraphPath(&gPathA,NULL,NULL,0,&sPathA);
+    Try{
+        resetWorkingAVL();
+        addNeighbouringNode(&gPath); //nearestNode from source C
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeD,&sPathC,2,2);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeB,&sPathC,7,7);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->left->sPath,&nodeA,&sPathC,1,1);
+        //mark C
+        // it able to sees that C does not added into the node
+        gPath.sPath->id->marked = 1;
+        deleteGraphPathFromWorkingAVL(&sPathA);
+        addNeighbouringNode(&gPathA); //nearestNode from source A
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeD,&sPathC,2,2);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeB,&sPathA,4,3);
+        TEST_ASSERT_NULL(rootTreePathCost->left);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
+/**
+*              (3)
+*         (A)----- (B)                          (D)2
+*        1 \     7 /        -------->              \
+*           \    /                                (B)7
+*            (C)------(D)
+*                   2
+**/
+// A is marked
+void test_addNeighbouringNode_one_of_the_path_is_marked(void){
+    initPartialNetworkMap();
+    initNetworkNode(&nodeA ,"nodeA",&networkListA,1); //nodeA is marked
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initGraphPath(&gPath,NULL,NULL,0,&sPathC);
+    Try{
+        resetWorkingAVL();
+        addNeighbouringNode(&gPath);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->sPath,&nodeD,&sPathC,2,2);
+        TEST_ASSERT_EQUAL_SHORTEST_PATH(rootTreePathCost->right->sPath,&nodeB,&sPathC,7,7);
+        TEST_ASSERT_NULL(rootTreePathCost->left);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
+void test_addNeighbouringNode_NULL_input(void){
+    initPartialNetworkMap();
+    initNetworkNode(&nodeA ,"nodeA",&networkListA,1); //nodeA is marked
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initGraphPath(&gPath,NULL,NULL,0,&sPathC);
+    Try{
+        resetWorkingAVL();
+        addNeighbouringNode(NULL);
+        TEST_ASSERT_NULL(rootTreePathCost);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
 //////////////printShortestPathDetails/////////////////////////////////////////////////////
 //printShortestPathDetails is function to print shortestPath details to users
 /**
@@ -596,86 +812,23 @@ void test_printShortestPathDetails_Spath_NULL(void){
         TEST_ASSERT_EQUAL(ERR_SPATH_NULL,ex->errorCode);
     }
 }
+//////////////printSinglePath/////////////////////////////////////////////////////
+//printSinglePath is function to print path from source to destination
 
-//////////////findShortestPath/////////////////////////////////////////////////////
-//findShortestPath is main function to find shortestPath from the source to destination node
-/**
-*              (3)       (1)
-*         (A)----- (B) ----- (E)
-*        1 \     7 / \ 5    /
-*           \    /    \   /  (7)
-*            (C)------(D)
-*                   2
-**/
-//From source C to nodeB
-void test_findShortestPath(void){
-    initFullNetworkMap();
+void test_printSinglePath(void){
+    //init expected ShortestPathNode
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
+    initShortestPathNode(&sPathB,&nodeB ,&sPathA,4,3);
+    initShortestPathNode(&sPathE,&nodeE ,&sPathB,5,1);
     Try{
-        findShortestPath(&nodeC,"nodeB");
-    }Catch(ex) {
-        dumpException(ex);
-        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
-    }
-
-}
-/**
-*              (3)       (1)
-*         (A)----- (B) ----- (E)
-*        1 \     7 / \ 5    /
-*           \    /    \   /  (7)
-*            (C)------(D)
-*                   2
-**/
-void test_findShortestPath_differentSource(void){
-    initFullNetworkMap();
-    Try{
-        findShortestPath(&nodeE,"nodeC");
+        printSinglePath(&sPathE);
     }Catch(ex) {
         dumpException(ex);
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
     }
 }
-/**
-*                  ( F )
-*              6 /     \ 8
-*            ( D )      ( E )
-*             | 2 \   4 /  |
-*         10  |   ( C )    | 1
-*            | 2 /   5 \  |
-*           (A) ------- (B)
-*                 1
-**/
-  void test_findShortestPath_complex_map(void){
-      initComplexNetworkMap();
-      Try{
-          findShortestPath(&nodeA,"nodeF");
-      }Catch(ex) {
-          dumpException(ex);
-          TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
-      }
-  }
 
-void test_findShortestPath_network_node_NULL(void){
-    initFullNetworkMap();
-    Try{
-        findShortestPath(NULL,"nodeC");
-        TEST_FAIL_MESSAGE("expecting exception to be thrown");
-    }Catch(ex) {
-        dumpException(ex);
-        TEST_ASSERT_EQUAL(ERR_NETWORK_NODE_NULL,ex->errorCode);
-    }
-}
-
-void test_findShortestPath_dst_name_NULL(void){
-    initFullNetworkMap();
-    Try{
-        findShortestPath(&nodeE,NULL);
-        TEST_FAIL_MESSAGE("expecting exception to be thrown");
-    }Catch(ex) {
-        dumpException(ex);
-        TEST_ASSERT_EQUAL(ERR_DST_NAME_NULL,ex->errorCode);
-    }
-}
 //////////////printPathCostFromShortestPath/////////////////////////////////////////////////////
 //printPathCostFromShortestPath is function to print shortestPath path Cost
 
@@ -701,36 +854,29 @@ void test_printPathCostFromShortestPath_listItem_name_NULL(void){
         TEST_ASSERT_EQUAL(ERR_SPATH_LIST_ITEM_NULL,ex->errorCode);
     }
 }
-//////////////findAllShortestPathCost/////////////////////////////////////////////////////
-//findAllShortestPathCost is function to find all shortestPath path Cost and print
 
-void test_findAllShortestPathCost(void){
+//////////////printPathLinkFromShortestPath/////////////////////////////////////////////////////
+//printPathLinkFromShortestPath is function to print shortestPath path link
+
+void test_printPathLinkFromShortestPath(void){
     initFullNetworkMap();
+    initShortestPathNode(&sPathA,&nodeA ,NULL,0,0);
+    ListItem * item;
+    item->data = (void*)&sPathA;
     Try{
-        findAllShortestPathCost(&nodeC);
+        printPathLinkFromShortestPath(item);
     }Catch(ex) {
         dumpException(ex);
         TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
     }
-
 }
-/**
-*                  ( F )
-*              6 /     \ 8
-*            ( D )      ( E )
-*             | 2 \   4 /  |
-*         10  |   ( C )    | 1
-*            | 2 /   5 \  |
-*           (A) ------- (B)
-*                 1
-**/
-void test_findAllShortestPathCost_complex_map(void){
-    initComplexNetworkMap();
+
+void test_printPathLinkFromShortestPath_listItem_name_NULL(void){
     Try{
-        findAllShortestPathCost(&nodeA);
+        printPathLinkFromShortestPath(NULL);
+        TEST_FAIL_MESSAGE("expecting exception to be thrown");
     }Catch(ex) {
         dumpException(ex);
-        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+        TEST_ASSERT_EQUAL(ERR_SPATH_LIST_ITEM_NULL,ex->errorCode);
     }
-
 }
