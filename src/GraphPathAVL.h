@@ -5,7 +5,7 @@
 //shared Function
 GraphPath *createGraphPath(ShortestPathNode * sPath);
 GraphPath * _getGraphPath(void * valuePtr,GraphPath * root,Compare compare);
-
+void freeGraphPathNode(GraphPath * gPathNode);
 //Main Function
 void addGraphPathIntoWorkingAVL(ShortestPathNode * sPath);
 void deleteGraphPathFromWorkingAVL(ShortestPathNode * sPath);

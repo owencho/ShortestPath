@@ -2,8 +2,7 @@
 #include "ShortestPathNode.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "AvlAdd.h"
-#include "AvlDelete.h"
+#include "Avl.h"
 #include "Compare.h"
 #include "NetworkNode.h"
 #include "List.h"
@@ -21,7 +20,7 @@ void findShortestPath(NetworkNode * nNode , char * name){
     ListItem * listItem;
     ShortestPathNode * sPath;
     if(name == NULL){
-        throwException(ERR_DST_NAME_NULL,"Invalid input destination ode name");
+        throwException(ERR_DST_NAME_NULL,"Invalid input destination node name");
     }
     shortestPathList = generateShortestPath(nNode);
     listItem =findListItem(shortestPathList,name,(LinkedListCompare)shortestPathListCompare);

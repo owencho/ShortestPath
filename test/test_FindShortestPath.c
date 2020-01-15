@@ -4,8 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "CException.h"
-#include "AvlAdd.h"
-#include "AvlDelete.h"
+#include "Avl.h"
 #include "Node.h"
 #include "IntNode.h"
 #include "IntCompare.h"

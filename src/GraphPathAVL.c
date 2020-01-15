@@ -1,7 +1,6 @@
 #include "GraphPathAVL.h"
 #include "GraphCompare.h"
-#include "AvlAdd.h"
-#include "AvlDelete.h"
+#include "Avl.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -145,7 +144,7 @@ GraphPath * findSmallestPathCostFromAVL(void){
 }
 
 void resetPathCostAVL(void){
-    freeAllNodesInTree((Node*)rootTreePathCost);
+    visitPostOrder((Node*)rootTreePathCost,(AVLProcessor)freeGraphPathNode);
     rootTreePathCost = NULL;
 }
 
@@ -190,7 +189,7 @@ GraphPath * getGraphPathFromNodeName(char * nodeName){
 }
 
 void resetNodeNameAVL(void){
-    freeAllNodesInTree((Node*)rootTreeNodeName);
+    visitPostOrder((Node*)rootTreeNodeName,(AVLProcessor)freeGraphPathNode);
     rootTreeNodeName = NULL;
 }
 //Shared Function
@@ -210,4 +209,8 @@ GraphPath * _getGraphPath(void * valuePtr,GraphPath * root,Compare compare){
             foundNode = _getGraphPath(valuePtr,root->left,compare);
     }
     return foundNode;
+}
+
+void freeGraphPathNode(GraphPath * gPathNode){
+    freeGraphPath(gPathNode);
 }
