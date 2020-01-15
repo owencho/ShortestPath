@@ -145,7 +145,7 @@ GraphPath * findSmallestPathCostFromAVL(void){
 }
 
 void resetPathCostAVL(void){
-    freeGraphPath(rootTreePathCost);
+    freeAllNodesInTree((Node*)rootTreePathCost);
     rootTreePathCost = NULL;
 }
 
@@ -190,7 +190,7 @@ GraphPath * getGraphPathFromNodeName(char * nodeName){
 }
 
 void resetNodeNameAVL(void){
-    freeGraphPath(rootTreeNodeName);
+    freeAllNodesInTree((Node*)rootTreeNodeName);
     rootTreeNodeName = NULL;
 }
 //Shared Function

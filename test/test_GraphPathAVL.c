@@ -290,6 +290,25 @@ void test_deleteGraphPathFromWorkingAVL_inputNULL(void){
     }
 
 }
+
+void test_resetWorkingAVL(void){
+    initShortestPathNodeABC();
+    resetAndAddNodeCostABC();
+    Try{
+        resetWorkingAVL();
+        TEST_ASSERT_NULL(rootTreePathCost);
+        TEST_ASSERT_NULL(rootTreeNodeName);
+        //to test if both root tree points to NULL
+        // and see is it crash on second reset
+        resetWorkingAVL();
+        TEST_ASSERT_NULL(rootTreePathCost);
+        TEST_ASSERT_NULL(rootTreeNodeName);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////Function for PathCost////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
