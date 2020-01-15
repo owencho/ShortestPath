@@ -60,10 +60,12 @@ void addGraphPathIntoPathCostAVL(ShortestPathNode * sPath){
                                (Node*)newGPath,
                                (Compare)graphCompareForPathCostAvlAdd);
         }Catch(ex){
+            if(ex->errorCode == ERR_SAME_NODE){ //if the avlAdd found there's same node inside then we add into the sameCostlist
+                gNode= getGraphPathFromPathCost(sPath->pathCost);
+                gNode->listWithSameCost = listAddItemToHead(gNode->listWithSameCost,(void*)newGPath);
+                resetCurrentListItem(gNode->listWithSameCost);
+            }
             freeException(ex);
-            gNode= getGraphPathFromPathCost(sPath->pathCost);
-            gNode->listWithSameCost = listAddItemToHead(gNode->listWithSameCost,(void*)newGPath);
-            resetCurrentListItem(gNode->listWithSameCost);
         }
     }
 }
