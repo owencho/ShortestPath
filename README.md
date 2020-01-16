@@ -4,7 +4,7 @@
 This is the Shortest Path project which a algorithm that search and find the shortest path from the source to the destination node. \
 The findShortestPath function will generate a list of shortestPath from the source to all Node and print out the shortestPath with the path cost from the user input.
 
-This Shortest Path is based on one of the shortest path algorithm which is called Dijkstra algorithm that allows user
+This Shortest Path is based on one of the shortest path algorithm which is called **Dijkstra algorithm** that allows user
 to calculate and find the shortest path between one node that the user pick and every other node in the graph. 
 
 # 2.0 Finding the Shortest Path
@@ -50,19 +50,33 @@ But for insertion (adding) of graphPath node on the path cost AVL tree has a bit
 As this problem exist, this program provide a solution which the function of adding the node on path cost tree will catch exception from the original avlAdd function . As we know that the AvlAdd function will throw exception where if the node with the same path cost has been exist inside . The program wi; catch the exception and executes another task to actually add the node into the same path cost linkedlist on the graphPath with the same cost.
 
 ## 4.4 Removing the node
+Removing the graphPath node on the node Name Tree is similar as the normal delete function in AVL Tree.
+But for removal (delete) of graphPath node on the path cost AVL tree is different than remvoing the node from node name AVL tree due to the consideration of same cost node on the AVL tree for path cost.
+Thus , before removing the specific node ,user are requires to insert both pathCost and name in order to remove a node in pathCost binary tree. the system will try to find the node from the path cost with the user input path cost to delete. 
 
-## 4.5 Comparing the node
+After the system found the parent node with same path cost , the system will starts to compare the name. 
+If the name match with the parent node ,the system will remove the node and check whether is there any (shortest path with same path cost)graphPath node in the same cost list .
+If there is graphPath node in the same cost list , the head of the same cost list will be replacing the deleted Parent Node.
+<!-- example -->
 
-## 4.X Override the node with larger old path cost
+If the name does not match with the parent node , and there is (a list of shortest path node with same cost) graphPath node in the same cost list of the parent node.The system will starts to iterate the same cost list and compare the node with the name .After the system found a same name in listItem with the input name , system will runs linkedlist function to actually remove the listItem that carries the graphPath Data. 
 
-
-
-
-## 4.X Finding the smallest node
-Removing the smallest node is pretty simple , it is just take the most left node (smallest on AVL tree) on the path Cost AVL tree.
+## 4.5 Finding the smallest node
+Finding the smallest node is pretty simple , it is just take the most left node (smallest on AVL tree) on the path Cost AVL tree.
 if the smallest node has a list of same cost graphPath , it will return the head of the same cost linked list.
 
 # 5.0 Creating ShortestPath node when the node was found at nearest node
 When a node was found at the nearest current pointing node , it will automatically generate a shortestPath node from the nearest node that carries all the node information including the network node , parent , path cost (cost from source to destination) and link cost(cost from previous node to destination node) by using this function createShortestPathFromLinkItemData. This node is used to compares the node with same path Name in the AVL tree to compare the path Cost and decides whether to replace the node with newer path cost node.
 
 When a shortestPath node is generated , the parent of the shortestPath node will automatically assigned with the data of shortestPath node in the current pointing node. Its path cost will be  `path cost = parent path cost + current link cost` and its link cost will be the cost value in the LinkItemData that consist of head , tail and the cost.
+
+## 5.1 Adding the node into tree after ShortestPath node was created
+After a shortest Path node was created , system will check whether is the id (network node) inside the shortest path marked (confirmed as the shortest path to destination node in the map).The system will only add the graphPath that stores the shortestPath data into both tree when is not marked. this node will also be compared with the node inside the tree to check is there any node has similar destination and with different path Cost to decide whether should the node to be overriden or keep the old node. 
+
+## 5.2 overriding the node with larger old path cost with new node with smaller path cost
+overriding the node is pretty simple, after the system found that the new node has a shorter path cost than the existing node in AVLTree 
+the system will try to remove the old node with a longer path cost and replace it with the new node with smaller path cost.
+
+
+
+
