@@ -57,9 +57,10 @@ Thus , before removing the specific node ,user are requires to insert both pathC
 After the system found the parent node with same path cost , the system will starts to compare the name. 
 If the name match with the parent node ,the system will remove the node and check whether is there any (shortest path with same path cost)graphPath node in the same cost list .
 If there is graphPath node in the same cost list , the head of the same cost list will be replacing the deleted Parent Node.
-<!-- example -->
 
 If the name does not match with the parent node , and there is (a list of shortest path node with same cost) graphPath node in the same cost list of the parent node.The system will starts to iterate the same cost list and compare the node with the name .After the system found a same name in listItem with the input name , system will runs linkedlist function to actually remove the listItem that carries the graphPath Data. 
+
+![Copy of Copy of Untitled Diagram(2)](https://user-images.githubusercontent.com/51066670/72493426-ef86f500-385b-11ea-9141-c4087283ba86.png)
 
 ## 4.5 Finding the smallest node
 Finding the smallest node is pretty simple , it is just take the most left node (smallest on AVL tree) on the path Cost AVL tree.
