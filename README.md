@@ -98,3 +98,5 @@ void findAllShortestPathLink(NetworkNode * nNode);
 # 7.0 Reference
 1. https://www.codingame.com/playgrounds/1608/shortest-paths-with-dijkstras-algorithm/dijkstras-algorithm
 2. https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+3. https://github.com/owencho/AVLTree
+4. https://github.com/owencho/LinkedList
