@@ -188,6 +188,18 @@ void test_listCompareForListWithSameCostGraph_different_name_return_0(void){
     TEST_ASSERT_EQUAL(0,(compare(&listItem,(void *)&root)));
 }
 
+void test_listCompareForListWithSameCostGraph_NULL(void){
+    LinkedListCompare compare = (LinkedListCompare)listCompareForListWithSameCostGraph;
+    initNetworkNode(&nodeA,"nodeA",NULL,0);
+    initNetworkNode(&nodeB,"nodeB",NULL,0);
+    initShortestPathNode(&sPathRoot,&nodeA ,NULL,1,1);
+    initShortestPathNode(&sPathNode,&nodeB ,NULL,2,2);
+    root.sPath = &sPathRoot;
+    inputNode.sPath = &sPathNode;
+    listItem.data = (void*)&inputNode;
+    TEST_ASSERT_EQUAL(0,(compare(NULL,(void *)&root)));
+}
+
 void test_listCompareForListWithSameCostGraph_same_name_return_1(void){
     LinkedListCompare compare = (LinkedListCompare)listCompareForListWithSameCostGraph;
     initNetworkNode(&nodeA,"nodeA",NULL,0);

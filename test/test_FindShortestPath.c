@@ -829,6 +829,20 @@ void test_printSinglePath(void){
     }
 }
 
+void test_printSinglePath_input_NULL(void){
+    //init expected ShortestPathNode
+    initShortestPathNode(&sPathC,&nodeC ,NULL,0,0);
+    initShortestPathNode(&sPathA,&nodeA ,&sPathC,1,1);
+    initShortestPathNode(&sPathB,&nodeB ,&sPathA,4,3);
+    initShortestPathNode(&sPathE,&nodeE ,&sPathB,5,1);
+    Try{
+        printSinglePath(NULL);
+    }Catch(ex) {
+        dumpException(ex);
+        TEST_FAIL_MESSAGE("Do not expect any exception to be thrown");
+    }
+}
+
 //////////////printPathCostFromShortestPath/////////////////////////////////////////////////////
 //printPathCostFromShortestPath is function to print shortestPath path Cost
 

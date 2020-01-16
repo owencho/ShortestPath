@@ -184,9 +184,8 @@ void deleteGraphPathFromPathNameAVL(char * name){
 }
 
 GraphPath * getGraphPathFromNodeName(char * nodeName){
-    if(rootTreeNodeName == NULL || nodeName == NULL){
+    if(rootTreeNodeName == NULL || nodeName == NULL)
         return NULL;
-    }
     return _getGraphPath((void*)nodeName,rootTreeNodeName,(Compare)graphCompareForName);
 }
 

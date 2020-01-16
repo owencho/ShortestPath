@@ -312,6 +312,7 @@ void test_resetWorkingAVL(void){
     }
 
 }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////Function for PathCost////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -508,14 +509,7 @@ void test_findSmallestPathCostFromAVL_with_same_cost(void){
     resetPathCostAVL();
 }
 
-/**
-*
-*         (2)a
-*          |
-*         (2)C
-*          |
-*        (2)B
-**/
+
 void test_findSmallestPathCostFromAVL_tree_NULL(void){
     resetPathCostAVL();
     graphPathNode=findSmallestPathCostFromAVL();

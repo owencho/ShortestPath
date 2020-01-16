@@ -39,7 +39,7 @@ void assertEqualShortestPath(const ShortestPathNode * actualShortestPath,
             UNITY_TEST_FAIL(lineNumber,msg);
         }
     }
-    else{
+    else if (id == NULL && actualShortestPath->id != NULL){
         sprintf(msg,"the actual id of ShortestPathNode is %s and not NULL",actualShortestPath->id->name);
         UNITY_TEST_FAIL(lineNumber,msg);
     }

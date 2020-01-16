@@ -37,6 +37,15 @@ void test_ShortestPathListCompare_input_same_name(void){
     TEST_ASSERT_EQUAL(1,(compare(&listItem,"nodeA")));
 }
 
+void test_ShortestPathListCompare_input_NULL(void){
+    LinkedListCompare compare = (LinkedListCompare)shortestPathListCompare;
+    initNetworkNode(&nodeA ,"nodeA",NULL,0);
+    initShortestPathNode(&sPathRoot,&nodeA ,NULL,1,1);
+    listItem.data = (void*)&sPathRoot;
+    TEST_ASSERT_EQUAL(0,(compare(NULL,"nodeA")));
+}
+
+
 void test_ShortestPathListCompare_input_different_name(void){
     LinkedListCompare compare = (LinkedListCompare)shortestPathListCompare;
     initNetworkNode(&nodeA ,"nodeA",NULL,0);

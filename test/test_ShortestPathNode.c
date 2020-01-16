@@ -60,6 +60,13 @@ void test_createFirstShortestPath(void){
       TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,&nodeC,NULL,0,0);
 }
 
+void test_createFirstShortestPath_NULL_input(void){
+      initNetworkNode(&nodeC,"nodeC",NULL,0);
+      outSPathNode = createFirstShortestPath(NULL);
+      TEST_ASSERT_EQUAL_SHORTEST_PATH(outSPathNode,NULL,NULL,0,0);
+}
+
+
 //This function is used to convert the networkNode in the listItem into ShortestPathNode
 void test_createShortestPathFromLinkItemData(void){
       initLink(&linkItData,1,&nodeA,&nodeC);
