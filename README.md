@@ -4,9 +4,8 @@
 This is the Shortest Path project which a algorithm that search and find the shortest path from the source to the destination node. \
 The findShortestPath function will generate a list of shortestPath from the source to all Node and print out the shortestPath with the path cost from the user input.
 
-This Shortest Path is based on one of the shortest path algorithm which is called **Dijkstra algorithm** that allows user
-to calculate and find the shortest path between one node that the user pick and every other node in the graph. 
-
+This Shortest Path is based on one of the shortest path algorithm which is called **Dijkstra algorithm** that allows user to calculate and find the shortest path between one node that the user pick and every other node in the graph. 
+![mapdrawio(1)](https://user-images.githubusercontent.com/51066670/72487979-a4b0b180-384a-11ea-9a5e-24155f5794f8.png)
 # 2.0 Finding the Shortest Path
 In this project , submodule of AVL tree and LinkedList <!--add the link there --> is required for this shortest path to works.
 Shortest path project requires linkedlist to generate a list of shortest Path and store a list of nearest node in the Network Node.
@@ -15,15 +14,15 @@ smallest path in the working tree for finding the next nearest network.
 
 ## 2.1 How does this shortest Path works 
 1. Initially the first selected (source) Network node will added with GraphPath node(contains shortestPath details) into the tree. 
-
+![Untitled Diagram(1)](https://user-images.githubusercontent.com/51066670/72488788-f9552c00-384c-11ea-8bdc-aa13d5cf72f5.png)
 2. The system will find the node with the smallest path cost from the AVL tree and actually finds and add all the nearest Network Node in GraphPath node 
 from the node with smallest path cost.If the system found there's existing node with larger path cost compared to new path cost , system will 
 override<!-- put link here--> the old node and replaced it with the new node with smaller path cost and new path.
-
+![Copy of Untitled Diagram](https://user-images.githubusercontent.com/51066670/72489153-2c4bef80-384e-11ea-83e7-9bfe0d1f40ce.png)
 3. After adding all nearest node from the node with smallest path cost , the network node in the graphPath node with the smallest path cost will be marked as verified shortest path from source.
-
+![Copy of Untitled Diagram(1)](https://user-images.githubusercontent.com/51066670/72489263-7fbe3d80-384e-11ea-88b8-296978ce307e.png)
 4. The smallest node with  marked network Node will be removed from the from the working Tree.
-
+![Copy of Untitled Diagram(2)](https://user-images.githubusercontent.com/51066670/72489336-b5fbbd00-384e-11ea-89a7-d3ee8b269b2b.png)
 5. The shortest path node that contains marked network node and some cost data will added into the final linkedList that stores all the final shortest path details.
 
 6. The system will continue find the smallest node and repeat the step from 2 to 5 until the working tree is empty (all network node has shortest path calculated and the node is already marked as checked). 
