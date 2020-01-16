@@ -14,9 +14,9 @@ smallest path in the working tree for finding the next nearest network.
 
 ## 2.1 How does this shortest Path works 
 1. Initially the first selected (source) Network node will added with GraphPath node(contains shortestPath details) into the tree. 
-![Untitled Diagram(1)](https://user-images.githubusercontent.com/51066670/72488788-f9552c00-384c-11ea-8bdc-aa13d5cf72f5.png)
-2. The system will find the node with the smallest path cost from the AVL tree and actually finds and add all the nearest Network Node in GraphPath node from the node with smallest path cost.If the system found there's existing node with larger path cost compared to new path cost , system will override the old node and replaced it with the new node with smaller path cost and new path.
 ![1](https://user-images.githubusercontent.com/51066670/72495870-e188a280-3862-11ea-8f56-4e2c05fbd115.png)
+2. The system will find the node with the smallest path cost from the AVL tree and actually finds and add all the nearest Network Node in GraphPath node from the node with smallest path cost.If the system found there's existing node with larger path cost compared to new path cost , system will override the old node and replaced it with the new node with smaller path cost and new path.
+![Copy x2 of Untitled Diagram](https://user-images.githubusercontent.com/51066670/72496001-36c4b400-3863-11ea-97da-5add51a905f4.png)
 3. After adding all nearest node from the node with smallest path cost , the network node in the graphPath node with the smallest path cost will be marked as verified shortest path from source.
 ![2](https://user-images.githubusercontent.com/51066670/72495867-e188a280-3862-11ea-9c21-9fd21bc6138d.png)
 4. The smallest node with  marked network Node will be removed from the from the working Tree.
@@ -86,7 +86,11 @@ void findAllShortestPathCost(NetworkNode * nNode);
 void findAllShortestPathLink(NetworkNode * nNode);
 ```
 ## 6.1 findShortestPath
-
-
-
-
+`findShortestPath(nodeA , "nodeF");` This line of code is used to find the shortest path from the source network node A to network node F.
+![mapdrawio(1)](https://user-images.githubusercontent.com/51066670/72496342-2cef8080-3864-11ea-82de-56a3dc5b111f.png)
+## 6.2 findAllShortestPathCost
+`findAllShortestPathCost(nodeA);` This line of code is used to find all the path cost of the shortest path from the source A to all network node.
+![mapdrawio(2)](https://user-images.githubusercontent.com/51066670/72496343-2d881700-3864-11ea-8069-c074ba8506f0.png)
+## 6.3 findAllShortestPathLink
+`findAllShortestPathLink(nodeA);` This line of code is used to find all the shortest path from the source network node A to all network node.
+![mapdrawio(3)](https://user-images.githubusercontent.com/51066670/72496344-2d881700-3864-11ea-8ff9-856c134ce307.png)
