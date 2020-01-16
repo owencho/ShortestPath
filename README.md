@@ -94,3 +94,7 @@ void findAllShortestPathLink(NetworkNode * nNode);
 ## 6.3 findAllShortestPathLink
 `findAllShortestPathLink(nodeA);` This line of code is used to find all the shortest path from the source network node A to all network node.
 ![mapdrawio(3)](https://user-images.githubusercontent.com/51066670/72496344-2d881700-3864-11ea-8ff9-856c134ce307.png)
+
+# 7.0 Reference
+1. https://www.codingame.com/playgrounds/1608/shortest-paths-with-dijkstras-algorithm/dijkstras-algorithm
+2. https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
