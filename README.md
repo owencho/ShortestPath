@@ -36,7 +36,7 @@ Network node is a node that consists of the node name , the links that contains 
 This AVL tree will act as a working tree for this project to actually store the node that the system found when searching the nearest node , it will only add the network node that has not marked (marked means the nearest node of the network node has been checked and verified with the shortestPath).The structure of the node in the working AVL will be GraphPath Node.
 
 The AVL tree actually separated into two AVL tree one is sorted with the path Cost and another one is sorted by node Name. Once the shortestPath program add anything into the node, both path cost tree and node Name will add the node into the tree . 
-
+![Copy of Copy of Untitled Diagram](https://user-images.githubusercontent.com/51066670/72492658-f19b8480-3858-11ea-9ceb-c5a8571905b3.png)
 The reason why we separates two working AVL tree is because sorting with path Cost is used for removal of smallest node as stated on the steps 2 on 2.1 .
 
 Sorting with node Name is used to locates the node and extract the pathCost out for comparision when the system found out this graphPath node with other shortestPath details to reach the same destination are exist in the tree. The system will extract this node from the pathName for comparision to decide whether should replace the node with the newer path depending on the path Cost. This due to cons of the AVL tree that unable to store the node with same value in a same tree .Thus , an linkedList is exist inside the graphPath Node
@@ -45,8 +45,9 @@ to store the node with the same cost.
 ## 4.3 Adding the node 
 Adding graphPath node on the node Name Tree is similar as the normal adding function in AVL Tree . 
 But for insertion (adding) of graphPath node on the path cost AVL tree has a bit difference between the normal adding function in AVL Tree.As it is possible to have a **same cost** on different path such as (A) -> (B) has a path cost of 2 and (A) -> (C) also has a path cost of 2. This is cause problem on AVL tree as the submodule AVL tree that this project used **does not support middle node that has a same value as its parent.**
-
-As this problem exist, this program provide a solution which the function of adding the node on path cost tree will catch exception from the original avlAdd function . As we know that the AvlAdd function will throw exception where if the node with the same path cost has been exist inside . The program wi; catch the exception and executes another task to actually add the node into the same path cost linkedlist on the graphPath with the same cost.
+![Copy of Copy of Untitled Diagram(1)](https://user-images.githubusercontent.com/51066670/72493068-80f56780-385a-11ea-910e-0a28cd09b75e.png)
+![Copy of Copy of Untitled Diagram(2)](https://user-images.githubusercontent.com/51066670/72493067-805cd100-385a-11ea-95b4-cf2b5a92f370.png)
+As this problem exist, this program provide a solution which the function of adding the node on path cost tree will catch exception from the original avlAdd function . As we know that the AvlAdd function will throw exception where if the node with the same path cost has been exist inside . The program will catch the exception and executes another task to actually add the node into the same path cost linkedlist on the graphPath with the same cost.
 
 ## 4.4 Removing the node
 Removing the graphPath node on the node Name Tree is similar as the normal delete function in AVL Tree.
