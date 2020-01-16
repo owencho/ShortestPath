@@ -12,7 +12,7 @@
 #include "LinkedListCompare.h"
 #include "Exception.h"
 #include "AvlError.h"
-#include "Processor.h"
+#include "LinkedListProcessor.h"
 #include "ShortestPathError.h"
 
 void findShortestPath(NetworkNode * nNode , char * name){
@@ -37,7 +37,7 @@ void findAllShortestPathCost(NetworkNode * nNode){
     shortestPathList = generateShortestPath(nNode);
     printf("\nAll Shortest path cost from %s \n",nNode->name);
     printf("-------------------------------- \n");
-    listForEach(shortestPathList,(Processor)printPathCostFromShortestPath);
+    listForEach(shortestPathList,(LinkedListProcessor)printPathCostFromShortestPath);
     printf("-------------------------------- \n \n");
 }
 
@@ -48,7 +48,7 @@ void findAllShortestPathLink(NetworkNode * nNode){
     shortestPathList = generateShortestPath(nNode);
     printf("\nAll Shortest path link from %s \n",nNode->name);
     printf("-------------------------------- \n");
-    listForEach(shortestPathList,(Processor)printPathLinkFromShortestPath);
+    listForEach(shortestPathList,(LinkedListProcessor)printPathLinkFromShortestPath);
     printf("-------------------------------- \n \n");
 }
 

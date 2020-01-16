@@ -23,7 +23,7 @@
 #include "CustomAssert.h"
 #include "ShortestPathListCompare.h"
 #include "ShortestPathError.h"
-#include "Processor.h"
+#include "LinkedListProcessor.h"
 ShortestPathNode sPathA ,sPathB,sPathC,sPathD,sPathE,sPathF;
 Link linkItemDataCA,linkItemDataCB,linkItemDataCD,linkItemDataCE;
 Link linkItemDataAC,linkItemDataAB,linkItemDataAD;

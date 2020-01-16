@@ -50,6 +50,15 @@ void test_CustomAssert_SHORTEST_PATH_all_pass(void){
     TEST_ASSERT_EQUAL_SHORTEST_PATH(&sPathD,&nodeC,NULL,2,2);
 }
 
+void test_CustomAssert_SHORTEST_PATH_actualParent_check_both_parent_expect_pass(void){
+    //create GraphPath
+    initNetworkNode(&nodeC, "nodeC",NULL,0);
+    initNetworkNode(&nodeA, "nodeA",NULL,0);
+    initShortestPathNode(&sPathD,&nodeC,&sPathA,2,2);
+    initShortestPathNode(&sPathA,&nodeA,NULL,1,1);
+    TEST_ASSERT_EQUAL_SHORTEST_PATH(&sPathD,&nodeC,&sPathA,2,2);
+}
+
 void test_CustomAssert_SHORTEST_PATH_fail_actualpath_NULL(void){
     //create GraphPath
     TEST_ASSERT_EQUAL_SHORTEST_PATH(NULL,&nodeC,NULL,2,2);
@@ -64,14 +73,6 @@ void test_CustomAssert_SHORTEST_PATH_actualParent_not_NULL(void){
     TEST_ASSERT_EQUAL_SHORTEST_PATH(&sPathD,&nodeC,NULL,2,2);
 }
 
-void test_CustomAssert_SHORTEST_PATH_actualParent_check_both_parent(void){
-    //create GraphPath
-    initNetworkNode(&nodeC, "nodeC",NULL,0);
-    initNetworkNode(&nodeA, "nodeA",NULL,0);
-    initShortestPathNode(&sPathD,&nodeC,&sPathA,2,2);
-    initShortestPathNode(&sPathA,&nodeA,NULL,1,1);
-    TEST_ASSERT_EQUAL_SHORTEST_PATH(&sPathD,&nodeC,&sPathA,2,2);
-}
 
 void test_CustomAssert_SHORTEST_PATH_actualParent_is_NULL(void){
     //create GraphPath
